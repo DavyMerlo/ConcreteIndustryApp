@@ -1,0 +1,15 @@
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\bin\Debug\net8.0\ConcreteIndustry.BLL.deps.json
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\bin\Debug\net8.0\ConcreteIndustry.BLL.dll
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\bin\Debug\net8.0\ConcreteIndustry.BLL.pdb
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.AssemblyInfoInputs.cache
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.AssemblyInfo.cs
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.dll
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\refint\ConcreteIndustry.BLL.dll
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.pdb
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ref\ConcreteIndustry.BLL.dll
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\bin\Debug\net8.0\ConcreteIndustry.DAL.dll
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\bin\Debug\net8.0\ConcreteIndustry.DAL.pdb
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\ConcreteIndustry.BLL.csproj.AssemblyReference.cache
+C:\Users\Davy\source\repos\ConcreteIndustry.BLL\obj\Debug\net8.0\Concrete.65221F22.Up2Date
