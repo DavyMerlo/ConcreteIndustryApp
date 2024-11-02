@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ConcreteIndustry.DAL
-build_property.ProjectDir = C:\Projects\ConcreteIndustry\ConcreteIndustry.DAL\
+build_property.ProjectDir = C:\Projects\ConcreteIndustryApp\ConcreteIndustry.DAL\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

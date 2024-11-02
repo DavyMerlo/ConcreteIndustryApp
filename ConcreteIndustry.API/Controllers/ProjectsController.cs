@@ -57,8 +57,8 @@ namespace ConcreteIndustry.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteProject(long id)
         {
-            await service.ProjectService.DeleteById(id);
-            var response = new ApiResponse<string>(true, "success", null, 200);
+            var isDeleted = await service.ProjectService.DeleteById(id);
+            var response = new ApiResponse<bool>(true, "success", isDeleted, 200);
             return Ok(response);
         }
     }

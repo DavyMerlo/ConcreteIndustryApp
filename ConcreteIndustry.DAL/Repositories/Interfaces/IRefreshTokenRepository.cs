@@ -7,5 +7,6 @@ namespace ConcreteIndustry.DAL.Repositories.Interfaces
         Task<RefreshToken?> GetRefreshTokenByUserIdAsync(long userId);
         Task<int> AddRefreshTokenAsync(RefreshToken refreshToken);
         Task<bool> UpdateRefreshTokenAsync(RefreshToken refreshToken);
+        Task<bool> IsRefreshTokenValid(string refreshTokenHash);
     }
 }

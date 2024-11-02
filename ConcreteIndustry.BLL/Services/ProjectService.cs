@@ -61,8 +61,8 @@ namespace ConcreteIndustry.BLL.Services
         {
             try
             {
-                var cachedProject = cacheService.GetData<Project>(CacheSettings.Key.Project);
-                if(cachedProject != null)
+                var cachedProject = cacheService.GetData<Project>($"{CacheSettings.Key.Project}:{id}");
+                if (cachedProject != null && cachedProject.DeletedAt == null)
                 {
                     return mapper.Map<ProjectDTO>(cachedProject);
                 }
@@ -86,11 +86,13 @@ namespace ConcreteIndustry.BLL.Services
             {
                 var createdProject = mapper.Map<Project>(request);
                 var id = await unitOfWork.Projects.AddProjectAsync(createdProject);
-                if(id <= 0)
+                if(id == null)
                 {
                     throw new ResourceAddFailedException(ErrorType.FailedToCreateResource, nameof(Project));
                 }
-                return await GetById(id);
+
+                cacheService.RemoveData(CacheSettings.Key.Projects);
+                return await GetById((long)id);
             }
             catch (Exception ex)
             {
@@ -104,13 +106,15 @@ namespace ConcreteIndustry.BLL.Services
             try
             {
                 var updatedProject = mapper.Map<Project>(request);
-                bool isUpdated = await unitOfWork.Projects.UpdateProjectAsync(updatedProject);
+                var isUpdated = await unitOfWork.Projects.UpdateProjectAsync(updatedProject);
                 if (!isUpdated)
                 {
                     logger.LogWarning("{Service} Update Warning", typeof(ProjectService));
                     throw new ResourceUpdateFailedException(ErrorType.FailedToUpdateResource, nameof(Project), request.Id);
                 }
-                return await GetById(updatedProject.Id);
+                cacheService.RemoveData(CacheSettings.Key.Project);
+                cacheService.RemoveData(CacheSettings.Key.Projects);
+                return await GetById(request.Id);
             }
             catch (Exception ex)
             {
@@ -119,16 +123,20 @@ namespace ConcreteIndustry.BLL.Services
             }
         }
 
-        public async Task DeleteById(long id)
+        public async Task<bool> DeleteById(long id)
         {
             try
             {
+                cacheService.RemoveData(CacheSettings.Key.Project);
+                cacheService.RemoveData(CacheSettings.Key.Projects);
                 bool isDeleted = await unitOfWork.Projects.DeleteProjectAsync(id);
                 if (!isDeleted)
                 {
                     logger.LogWarning("{Service} Delete Warning", typeof(ProjectService));
                     throw new ResourceDeleteFailedException(ErrorType.FailedToDeleteResource, nameof(Project), id);
                 }
+                
+                return isDeleted;
             }
             catch (Exception ex)
             {

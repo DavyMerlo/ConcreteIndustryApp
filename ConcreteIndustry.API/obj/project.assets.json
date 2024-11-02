@@ -5788,24 +5788,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Davy\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\davym\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.API\\ConcreteIndustry.API.csproj",
+      "projectUniqueName": "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.API\\ConcreteIndustry.API.csproj",
       "projectName": "ConcreteIndustry.API",
-      "projectPath": "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.API\\ConcreteIndustry.API.csproj",
-      "packagesPath": "C:\\Users\\Davy\\.nuget\\packages\\",
-      "outputPath": "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.API\\obj\\",
+      "projectPath": "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.API\\ConcreteIndustry.API.csproj",
+      "packagesPath": "C:\\Users\\davym\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.API\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Davy\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\davym\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5814,18 +5809,17 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "C:\\Users\\Davy\\.nuget\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.BLL\\ConcreteIndustry.BLL.csproj": {
-              "projectPath": "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.BLL\\ConcreteIndustry.BLL.csproj"
+            "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.BLL\\ConcreteIndustry.BLL.csproj": {
+              "projectPath": "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.BLL\\ConcreteIndustry.BLL.csproj"
             },
-            "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.DAL\\ConcreteIndustry.DAL.csproj": {
-              "projectPath": "C:\\Projects\\ConcreteIndustry\\ConcreteIndustry.DAL\\ConcreteIndustry.DAL.csproj"
+            "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.DAL\\ConcreteIndustry.DAL.csproj": {
+              "projectPath": "C:\\Projects\\ConcreteIndustryApp\\ConcreteIndustry.DAL\\ConcreteIndustry.DAL.csproj"
             }
           }
         }
@@ -5885,7 +5879,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

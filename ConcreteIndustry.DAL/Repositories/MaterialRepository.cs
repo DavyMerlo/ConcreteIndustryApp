@@ -25,7 +25,7 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var query = SqlHelper<MaterialColumn>.CreateSelectAllQuery(TableName.Materials);
 
-                return await dataConnection.ExecuteAsync(query, reader => new Material
+                return await dataConnection.ExecuteAsync(StoredProcedures.ViewMaterials.ToString(), reader => new Material
                 {
                     Id = reader.GetInt64((int)MaterialColumn.MaterialID),
                     Name = reader.GetString((int)MaterialColumn.Name),
@@ -35,7 +35,7 @@ namespace ConcreteIndustry.DAL.Repositories
                     CreatedAt = reader.GetDateTime((int)MaterialColumn.CreatedAt),
                     UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime((int)MaterialColumn.UpdatedAt),
                     DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)MaterialColumn.DeletedAt),
-                });
+                }, null, CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -48,13 +48,12 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<MaterialColumn>.CreateSelectByQuery(TableName.Materials, MaterialColumn.MaterialID);
-
                 var parameters = SqlHelper<MaterialColumn>.CreateParameters(
-                   (MaterialColumn.MaterialID, SqlDbType.BigInt, id)
+                       (MaterialColumn.MaterialID, SqlDbType.BigInt, id)
                 );
 
-                var result = await dataConnection.ExecuteAsync(query, reader => new Material
+                var result = await dataConnection.ExecuteAsync(StoredProcedures.ViewMaterialsById.ToString(), reader =>
+                new Material
                 {
                     Id = reader.GetInt64((int)MaterialColumn.MaterialID),
                     Name = reader.GetString((int)MaterialColumn.Name),
@@ -64,9 +63,9 @@ namespace ConcreteIndustry.DAL.Repositories
                     CreatedAt = reader.GetDateTime((int)MaterialColumn.CreatedAt),
                     UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime((int)MaterialColumn.UpdatedAt),
                     DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)MaterialColumn.DeletedAt),
-                }, parameters);
+                }, parameters, CommandType.StoredProcedure);
 
-                return result.SingleOrDefault();
+                return result.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -79,23 +78,19 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var columns = new[]
-                {
-                    MaterialColumn.Name,
-                    MaterialColumn.Quantity,
-                    MaterialColumn.PricePerTon,
-                    MaterialColumn.SupplierID
-                };
-
-                var query = SqlHelper<MaterialColumn>.CreateInsertQuery(TableName.Materials, MaterialColumn.MaterialID, columns);
-
                 var parameters = SqlHelper<MaterialColumn>.CreateParameters(
                      (MaterialColumn.Name, SqlDbType.NVarChar, material.Name),
                      (MaterialColumn.Quantity, SqlDbType.Decimal, material.Quantity),
                      (MaterialColumn.PricePerTon, SqlDbType.Decimal, material.PricePerTon),
-                     (MaterialColumn.SupplierID, SqlDbType.BigInt, material.SupplierID)
+                     (MaterialColumn.SupplierID, SqlDbType.BigInt, material.SupplierID),
+                     (MaterialColumn.MaterialID, SqlDbType.BigInt, material.Id)
                 );
-                return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
+
+                return await dataConnection.ExecuteScalarAsync<int>(
+                    StoredProcedures.AddMaterial.ToString(), 
+                    parameters, 
+                    CommandType.StoredProcedure
+                );
             }
             catch (Exception ex)
             {

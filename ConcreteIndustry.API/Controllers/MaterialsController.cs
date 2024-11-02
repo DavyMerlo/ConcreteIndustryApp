@@ -1,5 +1,7 @@
-﻿using ConcreteIndustry.BLL.DTOs.Responses.Api;
+﻿using ConcreteIndustry.BLL.DTOs.Requests;
+using ConcreteIndustry.BLL.DTOs.Responses.Api;
 using ConcreteIndustry.BLL.DTOs.Responses.Materials;
+using ConcreteIndustry.BLL.DTOs.Responses.Projects;
 using ConcreteIndustry.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +36,14 @@ namespace ConcreteIndustry.API.Controllers
             var material = await service.MaterialService.GetById(id);
             var response = new ApiResponse<MaterialDTO>(true, "success", material, 200);
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMaterial([FromBody] CreateMaterialRequest request)
+        {
+            var material = await service.MaterialService.Add(request);
+            var response = new ApiResponse<MaterialDTO>(true, "success", material, 201);
+            return CreatedAtAction(nameof(AddMaterial), response);
         }
     }
 }

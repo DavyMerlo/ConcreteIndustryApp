@@ -103,8 +103,7 @@ namespace ConcreteIndustry.BLL.Services
                     LastName = lastNameClaim,
                     UserName = userNameClaim,
                     Email = emailClaim,
-                    Role = (UserRole)Enum.Parse(typeof(UserRole), userRoleClaim),
-                    Expired = DateTime.Parse(expired),  
+                    Role = (UserRole)Enum.Parse(typeof(UserRole), userRoleClaim)
                 };
             }
             catch (Exception ex)
@@ -141,6 +140,30 @@ namespace ConcreteIndustry.BLL.Services
             catch (Exception ex )
             {
                 logger.LogError(ex,"{Service} Change Password function error", typeof(AppUserService));
+                throw;
+            }
+        }
+
+        public async Task<bool> IsPassWordValid(ClaimsPrincipal user, string password)
+        {
+            try
+            {
+                var identity = GetUserIdentity(user) ??
+                    throw new ResourceNotFoundException(ErrorType.ResourceNotFound, nameof(ClaimsIdentity), null);
+
+                var userId = long.Parse(identity.FindFirst("userid")?.Value ??
+                    throw new ResourceNotFoundException(ErrorType.ResourceNotFound, identity.FindFirst("userid")?.Value, null));
+
+                string? currentHashedPassword = await unitOfWork.AppUsers.GetPasswordHashByUserId(userId) ??
+                    throw new ResourceNotFoundException(ErrorType.ResourceNotFound, $"No password found with Id: {userId}", null);
+
+                VerifyCurrentPassword(password, currentHashedPassword);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "{Service} Check if Password is valid error", typeof(AppUserService));
                 throw;
             }
         }

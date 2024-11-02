@@ -54,6 +54,40 @@ namespace ConcreteIndustry.DAL.Repositories.Helpers
             }
         }
 
+        public async Task<bool> ExecuteNonQueryAsyncNew(string query,
+            SqlParameter[]? parameters = null,
+            string? output = null,
+            CommandType commandType = CommandType.Text)
+        {
+            SqlParameter? outputParam = null;
+            if (!string.IsNullOrEmpty(output))
+            {
+                outputParam = new SqlParameter($"@{output}", SqlDbType.Bit) { Direction = ParameterDirection.Output };
+            }
+
+            await using (var connection = await CreateConnectionAsync())
+            await using (var command = new SqlCommand(query, connection))
+            {
+                command.CommandType = commandType;
+
+                AddParametersToCommand(command, parameters);
+
+                if (outputParam != null)
+                {
+                    command.Parameters.Add(outputParam);
+                }
+
+                int affectedRows = await command.ExecuteNonQueryAsync();
+
+                if (outputParam != null)
+                {
+                    bool isSuccess = (bool)outputParam.Value;
+                    return isSuccess;
+                }
+                return affectedRows > 0;
+            }
+        }
+
         public async Task<T?> ExecuteScalarAsync<T>(string query, 
             SqlParameter[]? parameters = null, 
             CommandType commandType = CommandType.Text,
@@ -85,6 +119,51 @@ namespace ConcreteIndustry.DAL.Repositories.Helpers
                 return (T)Convert.ChangeType(result, typeof(T));
             }
         }
+
+        public async Task<T?> ExecuteOutputParameterAsync<T>(string query,
+             SqlParameter[]? parameters = null,
+             string? output = null,
+             SqlDbType? outputParamType = null, 
+             int? outputParamSize = null,    
+             CommandType commandType = CommandType.Text)
+        {
+            SqlParameter? outputParam = null;
+
+            if (!string.IsNullOrEmpty(output) && outputParamType.HasValue)
+            {
+                outputParam = new SqlParameter($"@{output}", outputParamType.Value)
+                {
+                    Direction = ParameterDirection.Output
+                };
+
+                if (outputParamSize.HasValue)
+                {
+                    outputParam.Size = outputParamSize.Value;
+                }
+            }
+
+            await using (var connection = await CreateConnectionAsync())
+            await using (var command = new SqlCommand(query, connection))
+            {
+                command.CommandType = commandType;
+                AddParametersToCommand(command, parameters);
+
+                if (outputParam != null)
+                {
+                    command.Parameters.Add(outputParam);
+                }
+
+                await command.ExecuteNonQueryAsync();
+
+                if (outputParam != null && outputParam.Value != DBNull.Value)
+                {
+                    return (T)Convert.ChangeType(outputParam.Value, typeof(T));
+                }
+                return default;
+            }
+        }
+
+
 
         private void AddParametersToCommand(SqlCommand command, 
             SqlParameter[]? parameters)

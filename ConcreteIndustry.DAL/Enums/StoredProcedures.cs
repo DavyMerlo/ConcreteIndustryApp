@@ -10,6 +10,16 @@ namespace ConcreteIndustry.DAL.Enums
     {
         GetUserByEmail,
         RegisterUser,
-        CheckClientExists
+        CheckClientExists,
+        ViewMaterialsById,
+        ViewMaterials,
+        ViewProjects,
+        ViewProjectsById,
+        AddMaterial,
+        AddProject,
+        UpdateProject,
+        DeleteProject,
+        IsValidRefreshToken,
+        ViewHashedPasswordByUserId
     }
 }

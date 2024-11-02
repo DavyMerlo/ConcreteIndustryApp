@@ -14,5 +14,6 @@ namespace ConcreteIndustry.BLL.Services.Interfaces
     {
         Task<IEnumerable<MaterialDTO>> GetAll();
         Task<MaterialDTO> GetById(long id);
+        Task<MaterialDTO?> Add(CreateMaterialRequest request);
     }
 }

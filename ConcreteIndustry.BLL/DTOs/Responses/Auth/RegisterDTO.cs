@@ -9,7 +9,7 @@ namespace ConcreteIndustry.BLL.DTOs.Responses.Account
 {
     public class RegisterDTO
     {
-        public string Token { get; set; } = string.Empty;
+        public string AccesToken { get; set; } = string.Empty;
         public AppUserDTO User { get; set; } = new AppUserDTO();
     }
 }

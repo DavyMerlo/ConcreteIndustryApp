@@ -1,9 +1,4 @@
 ﻿using ConcreteIndustry.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConcreteIndustry.DAL.Repositories.Interfaces
 {
@@ -17,5 +12,6 @@ namespace ConcreteIndustry.DAL.Repositories.Interfaces
         Task<int> RegisterUserAsync(AppUser appUser);
         Task<AppUser?> GetUserByUsernameAsync(string username);
         Task<bool> UpdatePasswordAsync(long userId, string password);
+        Task<string?> GetPasswordHashByUserId(long userId);
     }
 }

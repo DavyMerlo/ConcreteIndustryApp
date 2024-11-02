@@ -947,7 +947,10 @@
           "System.Runtime.Caching": "8.0.1"
         },
         "runtime": {
-          "ConcreteIndustry.BLL.dll": {}
+          "ConcreteIndustry.BLL.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "ConcreteIndustry.DAL/1.0.0": {
@@ -960,7 +963,10 @@
           "System.Data.SqlClient": "4.8.6"
         },
         "runtime": {
-          "ConcreteIndustry.DAL.dll": {}
+          "ConcreteIndustry.DAL.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

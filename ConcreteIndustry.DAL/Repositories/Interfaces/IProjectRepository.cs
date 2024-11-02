@@ -11,7 +11,7 @@ namespace ConcreteIndustry.DAL.Repositories.Interfaces
     {
         Task<IEnumerable<Project>> GetProjectsAsync();
         Task<Project?> GetProjectByIdAsync(long id);
-        Task<int> AddProjectAsync(Project project);
+        Task<long?> AddProjectAsync(Project project);
         Task<bool> UpdateProjectAsync(Project project);
         Task<bool> DeleteProjectAsync(long id);
     }

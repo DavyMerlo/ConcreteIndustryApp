@@ -110,7 +110,29 @@ namespace ConcreteIndustry.DAL.Repositories
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{nameof(TokenRepository).ToString()} Update {nameof(UserToken)} Error", typeof(TokenRepository));
+                logger.LogError(ex, $"{nameof(TokenRepository).ToString()} Update {nameof(RefreshToken)} Error", typeof(RefreshTokenRepository));
+                throw;
+            }
+        }
+
+        public async Task<bool> IsRefreshTokenValid(string refreshTokenHash)
+        {
+            try
+            {
+                var parameters = SqlHelper<RefreshTokenColumn>.CreateParameters(
+                    (RefreshTokenColumn.RefreshTokenHash, SqlDbType.NVarChar, refreshTokenHash)
+                );
+
+                return await dataConnection.ExecuteNonQueryAsyncNew(
+                        StoredProcedures.IsValidRefreshToken.ToString(),
+                        parameters,
+                        "IsValid",
+                        CommandType.StoredProcedure
+                );
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(TokenRepository).ToString()} Check {nameof(RefreshToken)} is valid Error", typeof(RefreshTokenRepository));
                 throw;
             }
         }

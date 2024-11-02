@@ -21,11 +21,10 @@ namespace ConcreteIndustry.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
             var result = await service.AccountService.Register(request);
-            var token = service.TokenService.GenerateUserToken(result.User, out DateTime expDate);
-            await service.TokenService.AddUserToken(result.User.Id, token, expDate);
+            var accesToken = await service.TokenService.AddUserToken(result.User);
             var response = new ApiResponse<RegisterDTO?>(true, "success", new RegisterDTO
             {
-                Token = token,
+                AccesToken = accesToken,
                 User = result.User
             },  200);
             return Ok(response);
@@ -35,15 +34,10 @@ namespace ConcreteIndustry.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
         {
             var result = await service.AccountService.Login(request);
-
             await service.TokenService.HandleToken(result.User.Id);
             await service.RefreshTokenService.HandleRefreshToken(result.User.Id);
-
-            var accesToken = service.TokenService.GenerateUserToken(result.User, out DateTime expirationDate);
-            var refreshToken = service.RefreshTokenService.GenerateRefreshToken();
-
-            await service.TokenService.AddUserToken(result.User.Id, accesToken, expirationDate);
-            await service.RefreshTokenService.AddRefreshToken(result.User.Id, refreshToken);
+            var accesToken = await service.TokenService.AddUserToken(result.User);
+            var refreshToken = await service.RefreshTokenService.AddRefreshToken(result.User.Id);
 
             var response = new ApiResponse<AuthenticationDTO?>(true, "success", 
                 new AuthenticationDTO
@@ -59,32 +53,28 @@ namespace ConcreteIndustry.API.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            var appUser = service.AccountService.GetUserClaims(User);
-            await service.TokenService.HandleToken(appUser.Id);
+            var user = service.AccountService.GetUserClaims(User);
+            await service.TokenService.HandleToken(user.Id);
+            await service.RefreshTokenService.HandleRefreshToken(user.Id);
             var response = new ApiResponse<string>(true, "success", null, 200);
             return Ok(response);
         }
 
         [Authorize]
-        [HttpGet("refreshtoken")]
+        [HttpGet("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
-            var userClaim = service.AccountService.GetUserClaims(User);
-
-            var isRefreshTokenValid = service.RefreshTokenService.IsRefreshTokenValid(userClaim.Id);
-
-            await service.TokenService.HandleToken(userClaim.Id);
-
-            var accesToken = service.TokenService.GenerateUserToken(userClaim, out DateTime expirationDate);
-            var refreshToken = await service.RefreshTokenService.GetRefreshTokenByUserId(userClaim.Id);
-
-            await service.TokenService.AddUserToken(userClaim.Id, accesToken, expirationDate);    
+            var user = service.AccountService.GetUserClaims(User);
+            var currentRefreshToken = await service.RefreshTokenService.GetRefreshTokenByUserId(user.Id);
+            var isCurrentRefreshTokenValid = await service.RefreshTokenService.IsRefreshTokenValid(currentRefreshToken);
+            await service.TokenService.HandleToken(user.Id);
+            var accesToken = await service.TokenService.AddUserToken(user);
 
             var response = new ApiResponse<TokenDTO>(true, "succes", 
                 new TokenDTO
                 {
-                    RefreshToken = refreshToken,    
-                    Token = accesToken,
+                    AccesToken = accesToken,
+                    RefreshToken = currentRefreshToken,    
                 },  200);
             return Ok(response);
         }
@@ -102,6 +92,7 @@ namespace ConcreteIndustry.API.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
+            var test = await service.AccountService.IsPassWordValid(User, request.CurrentPassword);
             var isUpdated = await service.AccountService.ChangePassword(request, User);
             var response = new ApiResponse<string>(true, "success", null, 200);    
             return Ok(response);

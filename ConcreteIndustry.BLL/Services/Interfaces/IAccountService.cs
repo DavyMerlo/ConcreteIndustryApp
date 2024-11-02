@@ -11,5 +11,6 @@ namespace ConcreteIndustry.BLL.Services.Interfaces
         Task<AuthenticationDTO> Login(LoginUserRequest request);
         AppUserDTO GetUserClaims(ClaimsPrincipal user);
         Task<bool> ChangePassword(ChangePasswordRequest request, ClaimsPrincipal user);
+        Task<bool> IsPassWordValid(ClaimsPrincipal user, string password);
     }
 }

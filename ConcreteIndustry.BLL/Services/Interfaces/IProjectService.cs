@@ -9,6 +9,6 @@ namespace ConcreteIndustry.BLL.Services.Interfaces
         Task<ProjectDTO> GetById(long id);
         Task<ProjectDTO?> Add(CreateProjectRequest request);
         Task<ProjectDTO?> Update(UpdateProjectRequest request);
-        Task DeleteById(long id);
+        Task<bool> DeleteById(long id);
     }
 }

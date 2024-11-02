@@ -86,11 +86,11 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
+                Enum procedure = StoredProcedures.GetUserByEmail;
+
                 var parameters = SqlHelper<AppUserColumn>.CreateParameters(
                     (AppUserColumn.Email, SqlDbType.NVarChar, email)
                 );
-
-                Enum procedure = StoredProcedures.GetUserByEmail;
 
                 var result = await dataConnection.ExecuteAsync(procedure.ToString(), reader =>
                 new AppUser
@@ -131,8 +131,6 @@ namespace ConcreteIndustry.DAL.Repositories
                     AppUserColumn.Role,
                 };
 
-                Enum procedure = StoredProcedures.RegisterUser;
-
                 var parameters = SqlHelper<AppUserColumn>.CreateParameters(
 
                         (AppUserColumn.FirstName, SqlDbType.NVarChar, appUser.FirstName),
@@ -144,7 +142,7 @@ namespace ConcreteIndustry.DAL.Repositories
                         (AppUserColumn.UserID, SqlDbType.BigInt, appUser.Id)
                 );
 
-                var userId = await dataConnection.ExecuteScalarAsync<int>(procedure.ToString(), parameters, CommandType.StoredProcedure);
+                var userId = await dataConnection.ExecuteScalarAsync<int>(StoredProcedures.RegisterUser.ToString(), parameters, CommandType.StoredProcedure);
                 return userId;
             }
             catch (Exception ex)
@@ -229,7 +227,31 @@ namespace ConcreteIndustry.DAL.Repositories
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{nameof(AppUserRepository).ToString()} Update {nameof(AppUser)}.{password} Error", typeof(AppUserRepository));
+                logger.LogError(ex, $"{nameof(AppUserRepository).ToString()} Update {nameof(AppUser)} Password Error", typeof(AppUserRepository));
+                throw;
+            }
+        }
+
+        public async Task<string?> GetPasswordHashByUserId(long userId)
+        {
+            try
+            {
+                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
+                   (AppUserColumn.UserID, SqlDbType.BigInt, userId)
+                );
+
+                return await dataConnection.ExecuteOutputParameterAsync<string>(
+                   StoredProcedures.ViewHashedPasswordByUserId.ToString(),
+                   parameters,
+                   "HashedPassword",
+                   SqlDbType.NVarChar,
+                   256,
+                   CommandType.StoredProcedure
+                );
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(AppUserRepository).ToString()} Update {nameof(AppUser)} Password Error", typeof(AppUserRepository));
                 throw;
             }
         }

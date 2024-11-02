@@ -23,9 +23,7 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ProjectColumn>.CreateSelectAllQuery(TableName.Projects);
-
-                return await dataConnection.ExecuteAsync(query, reader => new Project
+                return await dataConnection.ExecuteAsync(StoredProcedures.ViewProjects.ToString(), reader => new Project
                 {
                     Id = reader.GetInt64((int)ProjectColumn.ProjectID),
                     Name = reader.GetString((int)ProjectColumn.Name),
@@ -37,7 +35,10 @@ namespace ConcreteIndustry.DAL.Repositories
                     CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
                     UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ProjectColumn.UpdatedAt),
                     DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)ProjectColumn.DeletedAt),
-                });
+                },
+                null, 
+                CommandType.StoredProcedure
+                );
             }
             catch (Exception ex)
             {
@@ -50,13 +51,11 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ProjectColumn>.CreateSelectByQuery(TableName.Projects, ProjectColumn.ProjectID);
-
                 var parameters = SqlHelper<ProjectColumn>.CreateParameters(
                    (ProjectColumn.ProjectID, SqlDbType.BigInt, id)
                 );
 
-                var result = await dataConnection.ExecuteAsync(query, reader => new Project
+                var result = await dataConnection.ExecuteAsync(StoredProcedures.ViewProjectsById.ToString(), reader => new Project
                 {
                     Id = reader.GetInt64((int)ProjectColumn.ProjectID),
                     Name = reader.GetString((int)ProjectColumn.Name),
@@ -68,7 +67,10 @@ namespace ConcreteIndustry.DAL.Repositories
                     CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
                     UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ProjectColumn.UpdatedAt),
                     DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)ProjectColumn.DeletedAt),
-                }, parameters);
+                }, 
+                parameters, 
+                CommandType.StoredProcedure
+                );
 
                 return result.SingleOrDefault();
             }
@@ -79,31 +81,24 @@ namespace ConcreteIndustry.DAL.Repositories
             }
         }
 
-        public async Task<int> AddProjectAsync(Project project)
+        public async Task<long?> AddProjectAsync(Project project)
         {
             try
             {
-                var columns = new[]
-                {
-                    ProjectColumn.Name,
-                    ProjectColumn.Location,
-                    ProjectColumn.ClientID,
-                    ProjectColumn.StartDate,
-                    ProjectColumn.EndDate,
-                    ProjectColumn.EstimatedVolume
-                };
-
-                var query = SqlHelper<ProjectColumn>.CreateInsertQuery(TableName.Projects, ProjectColumn.ProjectID, columns);
-
                 var parameters = SqlHelper<ProjectColumn>.CreateParameters(
                      (ProjectColumn.Name, SqlDbType.NVarChar, project.Name),
                      (ProjectColumn.Location, SqlDbType.NVarChar, project.Location),
                      (ProjectColumn.ClientID, SqlDbType.BigInt, project.ClientID),
                      (ProjectColumn.StartDate, SqlDbType.Date, project.StartDate.Date),
                      (ProjectColumn.EndDate, SqlDbType.Date, project.EndDate.Date),
-                     (ProjectColumn.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue)
+                     (ProjectColumn.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue),
+                     (ProjectColumn.ProjectID, SqlDbType.BigInt, project.Id)
                 );
-                return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
+                return await dataConnection.ExecuteScalarAsync<int>(
+                    StoredProcedures.AddProject.ToString(), 
+                    parameters,
+                    CommandType.StoredProcedure
+                );
             }
             catch (Exception ex)
             {
@@ -116,18 +111,6 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var columns = new[]
-                {
-                    ProjectColumn.Name,
-                    ProjectColumn.Location,
-                    ProjectColumn.ClientID,
-                    ProjectColumn.StartDate,
-                    ProjectColumn.EndDate,
-                    ProjectColumn.EstimatedVolume
-                };
-
-                var query = SqlHelper<ProjectColumn>.CreateUpdateQuery(TableName.Projects, ProjectColumn.ProjectID, columns);
-
                 var parameters = SqlHelper<ProjectColumn>.CreateParameters(
                      (ProjectColumn.ProjectID, SqlDbType.BigInt, project.Id),
                      (ProjectColumn.Name, SqlDbType.NVarChar, project.Name),
@@ -138,8 +121,12 @@ namespace ConcreteIndustry.DAL.Repositories
                      (ProjectColumn.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue)
                 );
 
-                int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
-                return rowsAffected > 0;
+                return await dataConnection.ExecuteNonQueryAsyncNew(
+                    StoredProcedures.UpdateProject.ToString(), 
+                    parameters, 
+                    "IsSuccessful", 
+                    CommandType.StoredProcedure
+                );
             }
             catch (Exception ex)
             {
@@ -152,14 +139,16 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ProjectColumn>.CreateDeleteQuery(TableName.Projects, ProjectColumn.ProjectID);
-
                 var parameters = SqlHelper<ProjectColumn>.CreateParameters(
                     (ProjectColumn.ProjectID, SqlDbType.BigInt, id)
                 );
 
-                int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
-                return rowAffected > 0;
+                return await dataConnection.ExecuteNonQueryAsyncNew(
+                    StoredProcedures.DeleteProject.ToString(),
+                    parameters,
+                    "IsSuccessful",
+                    CommandType.StoredProcedure
+                );
             }
             catch (Exception ex)
             {

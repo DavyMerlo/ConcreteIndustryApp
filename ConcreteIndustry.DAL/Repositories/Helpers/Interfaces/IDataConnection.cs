@@ -17,9 +17,21 @@ namespace ConcreteIndustry.DAL.Repositories.Helpers.Interfaces
             string query, 
             SqlParameter[] parameters);
 
+        Task<bool> ExecuteNonQueryAsyncNew(string query,
+            SqlParameter[]? parameters = null,
+            string? output = null,
+            CommandType commandType = CommandType.Text);
+
         Task<T?> ExecuteScalarAsync<T>(string query,
             SqlParameter[]? parameters = null,
             CommandType commandType = CommandType.Text,
             SqlParameter? output = null);
+
+        Task<T?> ExecuteOutputParameterAsync<T>(string query,
+             SqlParameter[]? parameters = null,
+             string? output = null,
+             SqlDbType? outputParamType = null,
+             int? outputParamSize = null,
+             CommandType commandType = CommandType.Text);
     }
 }

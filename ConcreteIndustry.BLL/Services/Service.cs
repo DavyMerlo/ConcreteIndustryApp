@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ConcreteIndustry.BLL.Services.Caching;
 using ConcreteIndustry.BLL.Services.Interfaces;
-using ConcreteIndustry.BLL.Services.Security;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 

@@ -1,5 +1,4 @@
 ﻿using ConcreteIndustry.BLL.DTOs.Responses.Users;
-using System.Security.Claims;
 
 namespace ConcreteIndustry.BLL.Services.Interfaces
 {
@@ -7,7 +6,7 @@ namespace ConcreteIndustry.BLL.Services.Interfaces
     {
         string GenerateUserToken(AppUserDTO? appUser, out DateTime expirationDat);
         Task<string> GetUserTokenByUserId(long userId);
-        Task AddUserToken(long userId, string token, DateTime expired);
+        Task<string> AddUserToken(AppUserDTO? userDTO);
         Task HandleToken(long userId);
     }
 }

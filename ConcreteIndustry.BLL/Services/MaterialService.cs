@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ConcreteIndustry.BLL.DTOs.Requests;
 using ConcreteIndustry.BLL.DTOs.Responses.Materials;
 using ConcreteIndustry.BLL.Enums;
 using ConcreteIndustry.BLL.Exceptions;
@@ -74,6 +75,25 @@ namespace ConcreteIndustry.BLL.Services
             catch (Exception ex)
             {
                 logger.LogError(ex,"{Service} Get By Id function error", typeof(MaterialService));
+                throw;
+            }
+        }
+
+        public async Task<MaterialDTO?> Add(CreateMaterialRequest request)
+        {
+            try
+            {
+                var createdMaterial = mapper.Map<Material>(request);
+                var id = await unitOfWork.Materials.AddMaterialAsync(createdMaterial);
+                if (id <= 0)
+                {
+                    throw new ResourceAddFailedException(ErrorType.FailedToCreateResource, nameof(Material));
+                }
+                return await GetById(id);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "{Service} Create Error", typeof(MaterialService));
                 throw;
             }
         }

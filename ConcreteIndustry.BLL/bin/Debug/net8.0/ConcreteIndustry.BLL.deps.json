@@ -978,7 +978,10 @@
           "System.Data.SqlClient": "4.8.6"
         },
         "runtime": {
-          "ConcreteIndustry.DAL.dll": {}
+          "ConcreteIndustry.DAL.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

@@ -32,6 +32,9 @@ namespace ConcreteIndustry.BLL.MappingProfiles
 
             CreateMap<UserTokenDTO, UserToken>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            CreateMap<CreateMaterialRequest, Material>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

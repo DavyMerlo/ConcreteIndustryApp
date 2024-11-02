@@ -54,18 +54,29 @@ namespace ConcreteIndustry.BLL.Services
             }
         }
 
-        public async Task AddUserToken(long userId, string token, DateTime expired)
+        public async Task<string> AddUserToken(AppUserDTO? userDTO)
         {
             try
             {
+                if (userDTO == null)
+                {
+                    throw new ArgumentNullException(nameof(AppUser), "AppUser cannot be null.");
+                }
+                var user = mapper.Map<AppUser>(userDTO);
+
+                DateTime expired;
+                var token = JwtProvider.CreateToken(user, out expired);
+
                 var userTokenDto = new UserTokenDTO
                 {
-                    UserID = userId,
+                    UserID = user.Id,
                     Token = token,
                     Expired = expired
                 };
+
                 var userToken = mapper.Map<UserToken>(userTokenDto);
                 await unitOfWork.Tokens.AddUserTokenAsync(userToken);
+                return userTokenDto.Token;
             }
             catch (Exception ex)
             {
