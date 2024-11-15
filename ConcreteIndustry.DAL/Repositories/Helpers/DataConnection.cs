@@ -43,6 +43,44 @@ namespace ConcreteIndustry.DAL.Repositories.Helpers
             return results;
         }
 
+        public async Task<(IEnumerable<T> Projects, int TotalCount, int TotalPages, bool HasNext, bool HasPrevious)> ExecuteAsyncWithMetaData<T>(
+            string query,
+            Func<SqlDataReader, T> readFunc,
+            SqlParameter[]? parameters = null,
+            CommandType commandType = CommandType.Text)
+        {
+            var results = new List<T>();
+            int totalCount = 0;
+            int totalPages = 0;
+            bool hasNext = false;
+            bool hasPrevious = false;
+            await using (var connection = await CreateConnectionAsync())
+            await using (var command = new SqlCommand(query, connection))
+            {
+                command.CommandType = commandType;
+                AddParametersToCommand(command, parameters);
+                await using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        results.Add(readFunc(reader));
+                    }
+
+                    if (await reader.NextResultAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            totalCount = reader.GetInt32(reader.GetOrdinal("TotalItems"));
+                            totalPages = reader.GetInt32(reader.GetOrdinal("TotalPages"));
+                            hasNext = reader.GetBoolean(reader.GetOrdinal("HasNext"));
+                            hasPrevious = reader.GetBoolean(reader.GetOrdinal("HasPrevious"));
+                        }
+                    }
+                }
+            }
+            return (results, totalCount, totalPages, hasNext, hasPrevious);
+        }
+
         public async Task<int> ExecuteNonQueryAsync(string query, 
             SqlParameter[]? parameters = null)
         {

@@ -18,6 +18,7 @@ namespace ConcreteIndustry.BLL.Services.Caching
             public const string Addresses = "addresses";
             public const string Project = "project";
             public const string Projects = "projects";
+            public const string ProjectsPaginated = "ProjectsPaginated";
             public const string Material = "material";
             public const string Materials = "materials";
             public const string Order = "order";

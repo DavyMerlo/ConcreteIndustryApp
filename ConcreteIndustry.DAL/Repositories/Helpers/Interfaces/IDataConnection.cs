@@ -13,6 +13,12 @@ namespace ConcreteIndustry.DAL.Repositories.Helpers.Interfaces
             SqlParameter[]? parameters = null,
             CommandType commandType = CommandType.Text);
 
+        Task<(IEnumerable<T> Projects, int TotalCount, int TotalPages, bool HasNext, bool HasPrevious)> ExecuteAsyncWithMetaData<T>(
+            string query,
+            Func<SqlDataReader, T> readFunc,
+            SqlParameter[]? parameters = null,
+            CommandType commandType = CommandType.Text);
+
         Task<int> ExecuteNonQueryAsync(
             string query, 
             SqlParameter[] parameters);

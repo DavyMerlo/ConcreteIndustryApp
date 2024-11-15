@@ -65,18 +65,19 @@ namespace ConcreteIndustry.BLL.Services
                 var user = mapper.Map<AppUser>(userDTO);
 
                 DateTime expired;
-                var token = JwtProvider.CreateToken(user, out expired);
+                var accesToken = JwtProvider.CreateToken(user, out expired);
+                var accesTokenHash = JwtProvider.HashToken(accesToken);
 
-                var userTokenDto = new UserTokenDTO
+                var userAccesTokenDto = new UserTokenDTO
                 {
                     UserID = user.Id,
-                    Token = token,
+                    Token = accesTokenHash,
                     Expired = expired
                 };
 
-                var userToken = mapper.Map<UserToken>(userTokenDto);
-                await unitOfWork.Tokens.AddUserTokenAsync(userToken);
-                return userTokenDto.Token;
+                var userAccesTokenHash = mapper.Map<UserToken>(userAccesTokenDto);
+                await unitOfWork.Tokens.AddUserTokenAsync(userAccesTokenHash);
+                return accesToken;
             }
             catch (Exception ex)
             {

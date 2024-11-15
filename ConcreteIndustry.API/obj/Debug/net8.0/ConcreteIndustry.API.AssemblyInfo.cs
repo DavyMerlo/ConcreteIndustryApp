@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConcreteIndustry.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+107e67cd2c1e77a6370eeb7d69d2e0e6c4d98a66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+86221e866cc60451e624430d854b1867127a04af")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConcreteIndustry.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConcreteIndustry.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

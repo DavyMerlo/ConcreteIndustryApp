@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,24 +23,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = $"SELECT * FROM {TableName.UserRefreshTokens} WHERE {RefreshTokenColumn.DeletedAt} IS NULL " +
-                    $"AND {RefreshTokenColumn.Revoked} IS NULL " +
-                    $"AND {RefreshTokenColumn.UserID} = @{RefreshTokenColumn.UserID}";
+                var query = $"SELECT * FROM {Table.UserRefreshTokens} WHERE {Column.RefreshToken.DeletedAt} IS NULL " +
+                    $"AND {Column.RefreshToken.Revoked} IS NULL " +
+                    $"AND {Column.RefreshToken.UserID} = @{Column.RefreshToken.UserID}";
 
-                var parameters = SqlHelper<RefreshTokenColumn>.CreateParameters(
-                    (RefreshTokenColumn.UserID, SqlDbType.BigInt, userId)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.RefreshToken.UserID, SqlDbType.BigInt, userId)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new RefreshToken
                 {
-                    Id = reader.GetInt64((int)RefreshTokenColumn.RefreshTokenID),
-                    UserID = reader.GetInt64((int)RefreshTokenColumn.UserID),
-                    RefreshTokenHash = reader.GetString((int)RefreshTokenColumn.RefreshTokenHash),
-                    Expired = reader.GetDateTime((int)RefreshTokenColumn.Expired),
-                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime((int)RefreshTokenColumn.Revoked),
-                    CreatedAt = reader.GetDateTime((int)RefreshTokenColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime((int)RefreshTokenColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)RefreshTokenColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.RefreshToken.RefreshTokenID),
+                    UserID = reader.GetInt64(Column.RefreshToken.UserID),
+                    RefreshTokenHash = reader.GetString(Column.RefreshToken.RefreshTokenHash),
+                    Expired = reader.GetDateTime(Column.RefreshToken.Expired),
+                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime(Column.RefreshToken.Revoked),
+                    CreatedAt = reader.GetDateTime(Column.RefreshToken.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime(Column.RefreshToken.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(Column.RefreshToken.DeletedAt),
                 }, parameters);
 
                 return result.FirstOrDefault();
@@ -58,19 +58,19 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    RefreshTokenColumn.UserID,
-                    RefreshTokenColumn.RefreshTokenHash,
-                    RefreshTokenColumn.Expired,
-                    RefreshTokenColumn.Revoked
+                    Column.RefreshToken.UserID,
+                    Column.RefreshToken.RefreshTokenHash,
+                    Column.RefreshToken.Expired,
+                    Column.RefreshToken.Revoked
                 };
 
-                var query = SqlHelper<RefreshTokenColumn>.CreateInsertQuery(TableName.UserRefreshTokens, RefreshTokenColumn.RefreshTokenID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.UserRefreshTokens, Column.RefreshToken.RefreshTokenID, columns);
 
-                var parameters = SqlHelper<RefreshTokenColumn>.CreateParameters(
-                    (RefreshTokenColumn.UserID, SqlDbType.BigInt, refreshToken.UserID),
-                    (RefreshTokenColumn.RefreshTokenHash, SqlDbType.NVarChar, refreshToken.RefreshTokenHash),
-                    (RefreshTokenColumn.Expired, SqlDbType.DateTime, refreshToken.Expired),
-                    (RefreshTokenColumn.Revoked, SqlDbType.DateTime, refreshToken.Revoked ?? (object)DBNull.Value)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.RefreshToken.UserID, SqlDbType.BigInt, refreshToken.UserID),
+                    (Column.RefreshToken.RefreshTokenHash, SqlDbType.NVarChar, refreshToken.RefreshTokenHash),
+                    (Column.RefreshToken.Expired, SqlDbType.DateTime, refreshToken.Expired),
+                    (Column.RefreshToken.Revoked, SqlDbType.DateTime, refreshToken.Revoked ?? (object)DBNull.Value)
                 );
 
                 var newRefreshTokenId = await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -89,20 +89,20 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    RefreshTokenColumn.UserID,
-                    RefreshTokenColumn.RefreshTokenHash,
-                    RefreshTokenColumn.Expired,
-                    RefreshTokenColumn.Revoked
+                    Column.RefreshToken.UserID,
+                    Column.RefreshToken.RefreshTokenHash,
+                    Column.RefreshToken.Expired,
+                    Column.RefreshToken.Revoked
                 };
 
-                var query = SqlHelper<RefreshTokenColumn>.CreateUpdateQuery(TableName.UserRefreshTokens, RefreshTokenColumn.RefreshTokenID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.UserRefreshTokens, Column.RefreshToken.RefreshTokenID, columns);
 
-                var parameters = SqlHelper<RefreshTokenColumn>.CreateParameters(
-                    (RefreshTokenColumn.RefreshTokenID, SqlDbType.BigInt, refreshToken.Id),
-                    (RefreshTokenColumn.UserID, SqlDbType.BigInt, refreshToken.UserID),
-                    (RefreshTokenColumn.RefreshTokenHash, SqlDbType.NVarChar, refreshToken.RefreshTokenHash),
-                    (RefreshTokenColumn.Expired, SqlDbType.DateTime, refreshToken.Expired),
-                    (RefreshTokenColumn.Revoked, SqlDbType.DateTime, refreshToken.Revoked ?? (object)DBNull.Value)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.RefreshToken.RefreshTokenID, SqlDbType.BigInt, refreshToken.Id),
+                    (Column.RefreshToken.UserID, SqlDbType.BigInt, refreshToken.UserID),
+                    (Column.RefreshToken.RefreshTokenHash, SqlDbType.NVarChar, refreshToken.RefreshTokenHash),
+                    (Column.RefreshToken.Expired, SqlDbType.DateTime, refreshToken.Expired),
+                    (Column.RefreshToken.Revoked, SqlDbType.DateTime, refreshToken.Revoked ?? (object)DBNull.Value)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -119,8 +119,8 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var parameters = SqlHelper<RefreshTokenColumn>.CreateParameters(
-                    (RefreshTokenColumn.RefreshTokenHash, SqlDbType.NVarChar, refreshTokenHash)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.RefreshToken.RefreshTokenHash, SqlDbType.NVarChar, refreshTokenHash)
                 );
 
                 return await dataConnection.ExecuteNonQueryAsyncNew(

@@ -1,10 +1,10 @@
 ﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using ConcreteIndustry.DAL.Helpers;
+using ConcreteIndustry.DAL.Constants;
 
 namespace ConcreteIndustry.DAL.Repositories
 {
@@ -23,19 +23,19 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ClientColumn>.CreateSelectAllQuery(TableName.Clients);
+                var query = SqlHelper.CreateSelectAllQuery(Table.Clients);
 
                 return await dataConnection.ExecuteAsync(query, reader => new Client
                 {
-                    Id = reader.GetInt64((int)ClientColumn.ClientID),
-                    CompanyName = reader.GetString((int)ClientColumn.CompanyName),
-                    ContactPerson = reader.GetString((int)ClientColumn.ContactPerson),
-                    PhoneNumber = reader.GetString((int)ClientColumn.PhoneNumber),
-                    Email = reader.GetString((int)ClientColumn.Email),
-                    AddressID = reader.GetInt64((int)ClientColumn.AddressID),
-                    CreatedAt = reader.GetDateTime((int)ClientColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)ClientColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ClientColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Client.ClientID),
+                    CompanyName = reader.GetString(Column.Client.CompanyName),
+                    ContactPerson = reader.GetString(Column.Client.ContactPerson),
+                    PhoneNumber = reader.GetString(Column.Client.PhoneNumber),
+                    Email = reader.GetString(Column.Client.Email),
+                    AddressID = reader.GetInt64(Column.Client.AddressID),
+                    CreatedAt = reader.GetDateTime(Column.Client.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(Column.Client.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Client.DeletedAt),
                 });
             }
             catch (Exception ex)
@@ -49,23 +49,23 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ClientColumn>.CreateSelectByQuery(TableName.Clients, ClientColumn.ClientID);
+                var query = SqlHelper.CreateSelectByQuery(Table.Clients, Column.Client.ClientID);
 
-                var parameters = SqlHelper<ClientColumn>.CreateParameters(
-                   (ClientColumn.ClientID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.Client.ClientID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new Client
                 {
-                    Id = reader.GetInt64((int)ClientColumn.ClientID),
-                    CompanyName = reader.GetString((int)ClientColumn.CompanyName),
-                    ContactPerson = reader.GetString((int)ClientColumn.ContactPerson),
-                    PhoneNumber = reader.GetString((int)ClientColumn.PhoneNumber),
-                    Email = reader.GetString((int)ClientColumn.Email),
-                    AddressID = reader.GetInt64((int)ClientColumn.AddressID),
-                    CreatedAt = reader.GetDateTime((int)ClientColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)ClientColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ClientColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Client.ClientID),
+                    CompanyName = reader.GetString(Column.Client.CompanyName),
+                    ContactPerson = reader.GetString(Column.Client.ContactPerson),
+                    PhoneNumber = reader.GetString(Column.Client.PhoneNumber),
+                    Email = reader.GetString(Column.Client.Email),
+                    AddressID = reader.GetInt64(Column.Client.AddressID),
+                    CreatedAt = reader.GetDateTime(Column.Client.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(Column.Client.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Client.DeletedAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -83,21 +83,21 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    ClientColumn.CompanyName,
-                    ClientColumn.ContactPerson,
-                    ClientColumn.PhoneNumber,
-                    ClientColumn.Email,
-                    ClientColumn.AddressID,
+                    Column.Client.CompanyName,
+                    Column.Client.ContactPerson,
+                    Column.Client.PhoneNumber,
+                    Column.Client.Email,
+                    Column.Client.AddressID,
                 };
 
-                var query = SqlHelper<ClientColumn>.CreateInsertQuery(TableName.Clients, ClientColumn.ClientID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.Clients, Column.Client.ClientID, columns);
 
-                var parameters = SqlHelper<ClientColumn>.CreateParameters(
-                    (ClientColumn.CompanyName, SqlDbType.NVarChar, client.CompanyName),
-                    (ClientColumn.ContactPerson, SqlDbType.NVarChar, client.ContactPerson),
-                    (ClientColumn.PhoneNumber, SqlDbType.NVarChar, client.PhoneNumber),
-                    (ClientColumn.Email, SqlDbType.NVarChar, client.Email),
-                    (ClientColumn.AddressID, SqlDbType.BigInt, client.AddressID)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Client.CompanyName, SqlDbType.NVarChar, client.CompanyName),
+                    (Column.Client.ContactPerson, SqlDbType.NVarChar, client.ContactPerson),
+                    (Column.Client.PhoneNumber, SqlDbType.NVarChar, client.PhoneNumber),
+                    (Column.Client.Email, SqlDbType.NVarChar, client.Email),
+                    (Column.Client.AddressID, SqlDbType.BigInt, client.AddressID)
                 );
 
                 return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -115,22 +115,22 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                {
-                    ClientColumn.CompanyName,
-                    ClientColumn.ContactPerson,
-                    ClientColumn.PhoneNumber,
-                    ClientColumn.Email,
-                    ClientColumn.AddressID,
+                    Column.Client.CompanyName,
+                    Column.Client.ContactPerson,
+                    Column.Client.PhoneNumber,
+                    Column.Client.Email,
+                    Column.Client.AddressID,
                 };
 
-                var query = SqlHelper<ClientColumn>.CreateUpdateQuery(TableName.Clients, ClientColumn.ClientID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.Clients, Column.Client.ClientID, columns);
 
-                var parameters = SqlHelper<ClientColumn>.CreateParameters(
-                    (ClientColumn.ClientID, SqlDbType.BigInt, client.Id),
-                    (ClientColumn.CompanyName, SqlDbType.NVarChar, client.CompanyName),
-                    (ClientColumn.ContactPerson, SqlDbType.NVarChar, client.ContactPerson),
-                    (ClientColumn.PhoneNumber, SqlDbType.NVarChar, client.PhoneNumber),
-                    (ClientColumn.Email, SqlDbType.NVarChar, client.Email),
-                    (ClientColumn.AddressID, SqlDbType.BigInt, client.AddressID)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Client.ClientID, SqlDbType.BigInt, client.Id),
+                    (Column.Client.CompanyName, SqlDbType.NVarChar, client.CompanyName),
+                    (Column.Client.ContactPerson, SqlDbType.NVarChar, client.ContactPerson),
+                    (Column.Client.PhoneNumber, SqlDbType.NVarChar, client.PhoneNumber),
+                    (Column.Client.Email, SqlDbType.NVarChar, client.Email),
+                    (Column.Client.AddressID, SqlDbType.BigInt, client.AddressID)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -147,10 +147,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ClientColumn>.CreateDeleteQuery(TableName.Clients, ClientColumn.ClientID);
+                var query = SqlHelper.CreateDeleteQuery(Table.Clients, Column.Client.ClientID);
 
-                var parameters = SqlHelper<ClientColumn>.CreateParameters(
-                    (ClientColumn.ClientID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Client.ClientID, SqlDbType.BigInt, id)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -169,11 +169,11 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var column = new[]
                 {
-                    ClientColumn.ClientID,
+                    Column.Client.ClientID,
                 };
-                Enum procedure = StoredProcedures.CheckClientExists;
-                var parameters = SqlHelper<ClientColumn>.CreateParameters( (ClientColumn.ClientID, SqlDbType.BigInt, id));
-                var output = SqlHelper<ClientColumn>.CreateOutputParameter("@Exists", SqlDbType.Int);
+                var procedure = StoredProcedures.CheckClientExists;
+                var parameters = SqlHelper.CreateParameters( (Column.Client.ClientID, SqlDbType.BigInt, id));
+                var output = SqlHelper.CreateOutputParameter("@Exists", SqlDbType.Int);
                 await dataConnection.ExecuteScalarAsync<int>(procedure.ToString(), parameters, CommandType.StoredProcedure, output);
                 return (int)output.Value == 1;
             }

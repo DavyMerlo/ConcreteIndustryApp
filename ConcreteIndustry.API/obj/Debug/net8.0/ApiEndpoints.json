@@ -346,6 +346,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ConcreteIndustry.API.Controllers.ProjectsController",
+    "Method": "GetAllProjectsPaginated",
+    "RelativePath": "api/Projects/{pageNumber}/{pageSize}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ConcreteIndustry.API.Controllers.UsersController",
     "Method": "GetAllUsers",
     "RelativePath": "api/Users",

@@ -23,10 +23,9 @@ namespace ConcreteIndustry.BLL.Services.Security
 
         public static string CreateToken(AppUser user, out DateTime expired)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
+            var originalkey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
 
             expired = DateTime.UtcNow.AddMinutes(15);
-
             var claims = new List<Claim>
             {
                 new Claim("emailaddress", user.Email),
@@ -38,7 +37,7 @@ namespace ConcreteIndustry.BLL.Services.Security
                 new Claim("expire", expired.ToString())
             };
 
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(originalkey, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -51,7 +50,8 @@ namespace ConcreteIndustry.BLL.Services.Security
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var jwtToken = tokenHandler.WriteToken(token);
+            return jwtToken;    
         }
 
         public static string CreateRefreshToken()
@@ -61,6 +61,28 @@ namespace ConcreteIndustry.BLL.Services.Security
             {
                 rng.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);
+            }
+        }
+
+        public static string HashToken(string accesToken)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(accesToken));
+                return Convert.ToBase64String(bytes);
+            }
+        }
+
+        private static byte[] GetValidKeyFromConfig()
+        {
+            if (string.IsNullOrEmpty(_key))
+            {
+                throw new ArgumentNullException("_key", "Key not set in appsettings.json");
+            }
+
+            using (var sha256 = SHA256.Create())
+            {
+                return sha256.ComputeHash(Encoding.UTF8.GetBytes(_key));
             }
         }
     }

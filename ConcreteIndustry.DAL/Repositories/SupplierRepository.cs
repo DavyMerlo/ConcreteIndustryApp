@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,19 +23,19 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<SupplierColumn>.CreateSelectAllQuery(TableName.Suppliers);
+                var query = SqlHelper.CreateSelectAllQuery(Table.Suppliers);
 
                 return await dataConnection.ExecuteAsync(query, reader => new Supplier
                 {
-                    Id = reader.GetInt64((int)SupplierColumn.SupplierID),
-                    Name = reader.GetString((int)SupplierColumn.Name),
-                    ContactPerson = reader.GetString((int)SupplierColumn.ContactPerson),
-                    PhoneNumber = reader.GetString((int)SupplierColumn.PhoneNumber),
-                    Email = reader.GetString((int)SupplierColumn.Email),
-                    AddressID = reader.GetInt64((int)SupplierColumn.AddressID),
-                    CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)SupplierColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)SupplierColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Supplier.SupplierID),
+                    Name = reader.GetString(Column.Supplier.Name),
+                    ContactPerson = reader.GetString(Column.Supplier.ContactPerson),
+                    PhoneNumber = reader.GetString(Column.Supplier.PhoneNumber),
+                    Email = reader.GetString(Column.Supplier.Email),
+                    AddressID = reader.GetInt64(Column.Supplier.AddressID),
+                    CreatedAt = reader.GetDateTime(Column.Supplier.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Supplier.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Supplier.DeletedAt),
                 });
             }
             catch (Exception ex)
@@ -49,23 +49,23 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<SupplierColumn>.CreateSelectByQuery(TableName.Suppliers, SupplierColumn.SupplierID);
+                var query = SqlHelper.CreateSelectByQuery(Table.Suppliers, Column.Supplier.SupplierID);
 
-                var parameters = SqlHelper<SupplierColumn>.CreateParameters(
-                   (SupplierColumn.SupplierID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.Supplier.SupplierID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new Supplier
                 {
-                    Id = reader.GetInt64((int)SupplierColumn.SupplierID),
-                    Name = reader.GetString((int)SupplierColumn.Name),
-                    ContactPerson = reader.GetString((int)SupplierColumn.ContactPerson),
-                    PhoneNumber = reader.GetString((int)SupplierColumn.PhoneNumber),
-                    Email = reader.GetString((int)SupplierColumn.Email),
-                    AddressID = reader.GetInt64((int)SupplierColumn.AddressID),
-                    CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)SupplierColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)SupplierColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Supplier.SupplierID),
+                    Name = reader.GetString(Column.Supplier.Name),
+                    ContactPerson = reader.GetString(Column.Supplier.ContactPerson),
+                    PhoneNumber = reader.GetString(Column.Supplier.PhoneNumber),
+                    Email = reader.GetString(Column.Supplier.Email),
+                    AddressID = reader.GetInt64(Column.Supplier.AddressID),
+                    CreatedAt = reader.GetDateTime(Column.Supplier.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Supplier.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Supplier.DeletedAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -83,21 +83,21 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    SupplierColumn.Name,
-                    SupplierColumn.ContactPerson,
-                    SupplierColumn.PhoneNumber,
-                    SupplierColumn.Email,
-                    SupplierColumn.AddressID,
+                    Column.Supplier.Name,
+                    Column.Supplier.ContactPerson,
+                    Column.Supplier.PhoneNumber,
+                    Column.Supplier.Email,
+                    Column.Supplier.AddressID,
                 };
 
-                var query = SqlHelper<SupplierColumn>.CreateInsertQuery(TableName.Suppliers, SupplierColumn.SupplierID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.Suppliers, Column.Supplier.SupplierID, columns);
 
-                var parameters = SqlHelper<SupplierColumn>.CreateParameters(
-                     (SupplierColumn.Name, SqlDbType.NVarChar, supplier.Name),
-                     (SupplierColumn.ContactPerson, SqlDbType.NVarChar, supplier.ContactPerson),
-                     (SupplierColumn.PhoneNumber, SqlDbType.NVarChar, supplier.PhoneNumber),
-                     (SupplierColumn.Email, SqlDbType.NVarChar, supplier.Email),
-                     (SupplierColumn.AddressID, SqlDbType.BigInt, supplier.AddressID)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Supplier.Name, SqlDbType.NVarChar, supplier.Name),
+                     (Column.Supplier.ContactPerson, SqlDbType.NVarChar, supplier.ContactPerson),
+                     (Column.Supplier.PhoneNumber, SqlDbType.NVarChar, supplier.PhoneNumber),
+                     (Column.Supplier.Email, SqlDbType.NVarChar, supplier.Email),
+                     (Column.Supplier.AddressID, SqlDbType.BigInt, supplier.AddressID)
                 );
                 return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
             }
@@ -113,23 +113,23 @@ namespace ConcreteIndustry.DAL.Repositories
             try
             {
                 var columns = new[]
-                {
-                    SupplierColumn.Name,
-                    SupplierColumn.ContactPerson,
-                    SupplierColumn.PhoneNumber,
-                    SupplierColumn.Email,
-                    SupplierColumn.AddressID,
+               {
+                    Column.Supplier.Name,
+                    Column.Supplier.ContactPerson,
+                    Column.Supplier.PhoneNumber,
+                    Column.Supplier.Email,
+                    Column.Supplier.AddressID,
                 };
 
-                var query = SqlHelper<SupplierColumn>.CreateInsertQuery(TableName.Suppliers, SupplierColumn.SupplierID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.Suppliers, Column.Supplier.SupplierID, columns);
 
-                var parameters = SqlHelper<SupplierColumn>.CreateParameters(
-                     (SupplierColumn.SupplierID, SqlDbType.BigInt, supplier.Id),
-                     (SupplierColumn.Name, SqlDbType.NVarChar, supplier.Name),
-                     (SupplierColumn.ContactPerson, SqlDbType.NVarChar, supplier.ContactPerson),
-                     (SupplierColumn.PhoneNumber, SqlDbType.NVarChar, supplier.PhoneNumber),
-                     (SupplierColumn.Email, SqlDbType.NVarChar, supplier.Email),
-                     (SupplierColumn.AddressID, SqlDbType.BigInt, supplier.AddressID)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Supplier.SupplierID, SqlDbType.BigInt, supplier.Id),
+                     (Column.Supplier.Name, SqlDbType.NVarChar, supplier.Name),
+                     (Column.Supplier.ContactPerson, SqlDbType.NVarChar, supplier.ContactPerson),
+                     (Column.Supplier.PhoneNumber, SqlDbType.NVarChar, supplier.PhoneNumber),
+                     (Column.Supplier.Email, SqlDbType.NVarChar, supplier.Email),
+                     (Column.Supplier.AddressID, SqlDbType.BigInt, supplier.AddressID)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -146,10 +146,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<SupplierColumn>.CreateDeleteQuery(TableName.Suppliers, SupplierColumn.SupplierID);
+                var query = SqlHelper.CreateDeleteQuery(Table.Suppliers, Column.Supplier.SupplierID);
 
-                var parameters = SqlHelper<SupplierColumn>.CreateParameters(
-                    (SupplierColumn.SupplierID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Supplier.SupplierID, SqlDbType.BigInt, id)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);

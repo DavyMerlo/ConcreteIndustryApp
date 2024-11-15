@@ -1,10 +1,10 @@
 ﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using ConcreteIndustry.DAL.Helpers;
+using ConcreteIndustry.DAL.Constants;
 
 namespace ConcreteIndustry.DAL.Repositories
 {
@@ -23,20 +23,20 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AddressColumn>.CreateSelectAllQuery(TableName.Addresses);
+                var query = SqlHelper.CreateSelectAllQuery(Table.Addresses);
 
                 return await dataConnection.ExecuteAsync(query, reader => new Address
                 {
-                    Id = reader.GetInt64((int)AddressColumn.AddressID),
-                    Street = reader.GetString((int)AddressColumn.Street),
-                    HouseNumber = reader.GetString((int)AddressColumn.HouseNumber),
-                    BoxNumber = reader.IsDBNull(3) ? null : reader.GetString((int)AddressColumn.BoxNumber),
-                    District = reader.GetString((int)AddressColumn.District),
-                    Country = reader.GetString((int)AddressColumn.Country),
-                    PostalCode = reader.GetString((int)AddressColumn.PostalCode),
-                    CreatedAt = reader.GetDateTime((int)AddressColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)AddressColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)AddressColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Address.AddressID),
+                    Street = reader.GetString(Column.Address.Street),
+                    HouseNumber = reader.GetString(Column.Address.HouseNumber),
+                    BoxNumber = reader.IsDBNull(3) ? null : reader.GetString(Column.Address.BoxNumber),
+                    District = reader.GetString(Column.Address.District),
+                    Country = reader.GetString(Column.Address.Country),
+                    PostalCode = reader.GetString(Column.Address.PostalCode),
+                    CreatedAt = reader.GetDateTime(Column.Address.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Address.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Address.DeletedAt),
                 });
             }
             catch (Exception ex)
@@ -50,24 +50,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AddressColumn>.CreateSelectByQuery(TableName.Addresses, AddressColumn.AddressID);
+                var query = SqlHelper.CreateSelectByQuery(Table.Addresses, Column.Address.AddressID);
 
-                var parameters = SqlHelper<AddressColumn>.CreateParameters(
-                   (AddressColumn.AddressID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.Address.AddressID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new Address
                 {
-                    Id = reader.GetInt64((int)AddressColumn.AddressID),
-                    Street = reader.GetString((int)AddressColumn.Street),
-                    HouseNumber = reader.GetString((int)AddressColumn.HouseNumber),
-                    BoxNumber = reader.IsDBNull(3) ? null : reader.GetString((int)AddressColumn.BoxNumber),
-                    District = reader.GetString((int)AddressColumn.District),
-                    Country = reader.GetString((int)AddressColumn.Country),
-                    PostalCode = reader.GetString((int)AddressColumn.PostalCode),
-                    CreatedAt = reader.GetDateTime((int)AddressColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)AddressColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)AddressColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Address.AddressID),
+                    Street = reader.GetString(Column.Address.Street),
+                    HouseNumber = reader.GetString(Column.Address.HouseNumber),
+                    BoxNumber = reader.IsDBNull(3) ? null : reader.GetString(Column.Address.BoxNumber),
+                    District = reader.GetString(Column.Address.District),
+                    Country = reader.GetString(Column.Address.Country),
+                    PostalCode = reader.GetString(Column.Address.PostalCode),
+                    CreatedAt = reader.GetDateTime(Column.Address.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Address.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Address.DeletedAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -85,23 +85,23 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    AddressColumn.Street,
-                    AddressColumn.HouseNumber,
-                    AddressColumn.BoxNumber,
-                    AddressColumn.District,
-                    AddressColumn.Country,
-                    AddressColumn.PostalCode,
+                    Column.Address.Street,
+                    Column.Address.HouseNumber,
+                    Column.Address.BoxNumber,
+                    Column.Address.District,
+                    Column.Address.Country,
+                    Column.Address.PostalCode,
                 };
 
-                var query = SqlHelper<AddressColumn>.CreateInsertQuery(TableName.Addresses, AddressColumn.AddressID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.Addresses, Column.Address.AddressID, columns);
 
-                var parameters = SqlHelper<AddressColumn>.CreateParameters(
-                    (AddressColumn.Street, SqlDbType.NVarChar, address.Street),
-                    (AddressColumn.HouseNumber, SqlDbType.NVarChar, address.HouseNumber),
-                    (AddressColumn.BoxNumber, SqlDbType.NVarChar, address.BoxNumber ?? (object)DBNull.Value),
-                    (AddressColumn.District, SqlDbType.NVarChar, address.District),
-                    (AddressColumn.Country, SqlDbType.NVarChar, address.Country),
-                    (AddressColumn.PostalCode, SqlDbType.NVarChar, address.PostalCode)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Address.Street, SqlDbType.NVarChar, address.Street),
+                    (Column.Address.HouseNumber, SqlDbType.NVarChar, address.HouseNumber),
+                    (Column.Address.BoxNumber, SqlDbType.NVarChar, address.BoxNumber ?? (object)DBNull.Value),
+                    (Column.Address.District, SqlDbType.NVarChar, address.District),
+                    (Column.Address.Country, SqlDbType.NVarChar, address.Country),
+                    (Column.Address.PostalCode, SqlDbType.NVarChar, address.PostalCode)
                 );
 
                 return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -119,24 +119,24 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                {
-                    AddressColumn.Street,
-                    AddressColumn.HouseNumber,
-                    AddressColumn.BoxNumber,
-                    AddressColumn.District,
-                    AddressColumn.Country,
-                    AddressColumn.PostalCode,
+                    Column.Address.Street,
+                    Column.Address.HouseNumber,
+                    Column.Address.BoxNumber,
+                    Column.Address.District,
+                    Column.Address.Country,
+                    Column.Address.PostalCode,
                 };
 
-                var query = SqlHelper<AddressColumn>.CreateUpdateQuery(TableName.Addresses, AddressColumn.AddressID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.Addresses, Column.Address.AddressID, columns);
 
-                var parameters = SqlHelper<AddressColumn>.CreateParameters(
-                    (AddressColumn.AddressID, SqlDbType.BigInt, address.Id),
-                    (AddressColumn.Street, SqlDbType.NVarChar, address.Street),
-                    (AddressColumn.HouseNumber, SqlDbType.NVarChar, address.HouseNumber),
-                    (AddressColumn.BoxNumber, SqlDbType.NVarChar, address.BoxNumber ?? (object)DBNull.Value),
-                    (AddressColumn.District, SqlDbType.NVarChar, address.District),
-                    (AddressColumn.Country, SqlDbType.NVarChar, address.Country),
-                    (AddressColumn.PostalCode, SqlDbType.NVarChar, address.PostalCode)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Address.AddressID, SqlDbType.BigInt, address.Id),
+                    (Column.Address.Street, SqlDbType.NVarChar, address.Street),
+                    (Column.Address.HouseNumber, SqlDbType.NVarChar, address.HouseNumber),
+                    (Column.Address.BoxNumber, SqlDbType.NVarChar, address.BoxNumber ?? (object)DBNull.Value),
+                    (Column.Address.District, SqlDbType.NVarChar, address.District),
+                    (Column.Address.Country, SqlDbType.NVarChar, address.Country),
+                    (Column.Address.PostalCode, SqlDbType.NVarChar, address.PostalCode)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -153,10 +153,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AddressColumn>.CreateDeleteQuery(TableName.Addresses, AddressColumn.AddressID);
+                var query = SqlHelper.CreateDeleteQuery(Table.Addresses, Column.Address.AddressID);
 
-                var parameters = SqlHelper<AddressColumn>.CreateParameters(
-                    (AddressColumn.AddressID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Address.AddressID, SqlDbType.BigInt, id)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);

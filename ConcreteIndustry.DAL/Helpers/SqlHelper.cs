@@ -3,19 +3,19 @@ using System.Data.SqlClient;
 
 namespace ConcreteIndustry.DAL.Helpers
 {
-    public static class SqlHelper<T> where T : Enum
+    public static class SqlHelper
     { 
-        public static string CreateSelectAllQuery(Enum tableName)
+        public static string CreateSelectAllQuery(string tableName)
         {
             return $"SELECT * FROM {tableName} WHERE DeletedAt IS NULL";
         }
 
-        public static string CreateSelectByQuery(Enum tableName, T column)
+        public static string CreateSelectByQuery(string tableName, string column)
         {
             return $"SELECT * FROM {tableName} WHERE DeletedAt IS NULL AND {column} = @{column}";
         }
 
-        public static string CreateInsertQuery(Enum tableName, T returnId, params T[] columns)
+        public static string CreateInsertQuery(string tableName, string returnId, params string[] columns)
         {
             var columnNames = string.Join(", ", columns.Select(c => GetColumnName(c)));
             var parameterNames = string.Join(", ", columns.Select(c => $"@{c}"));
@@ -25,7 +25,7 @@ namespace ConcreteIndustry.DAL.Helpers
                    $"VALUES ({parameterNames})";
         }
 
-        public static string CreateUpdateQuery(Enum tableName, T id, T[] columns)
+        public static string CreateUpdateQuery(string tableName, string id, string[] columns)
         {
             var columnUpdates = columns.Select(column => $"{column} = @{column}");
             var setClauseString = string.Join(", ", columnUpdates);
@@ -34,14 +34,14 @@ namespace ConcreteIndustry.DAL.Helpers
                    $"WHERE DeletedAt IS NULL AND {id}  = @{id}";
         }
 
-        public static string CreateDeleteQuery(Enum tableName, T id)
+        public static string CreateDeleteQuery(string tableName, string id)
         {
             return $"DELETE FROM {tableName} WHERE DeletedAt IS NULL AND {id} = @{id}"; ;
         }
 
-        public static SqlParameter[] CreateParameters(params (T Column, SqlDbType DbType, object Value)[] paramDetails)
+        public static SqlParameter[] CreateParameters(params (string name, SqlDbType DbType, object Value)[] paramDetails)
         {
-            return paramDetails.Select(pd => CreateParameter(pd.Column, pd.DbType, pd.Value)).ToArray();
+            return paramDetails.Select(pd => CreateParameter(pd.name, pd.DbType, pd.Value)).ToArray();
         }
 
         public static SqlParameter CreateOutputParameter(string output, SqlDbType dbType)
@@ -54,12 +54,12 @@ namespace ConcreteIndustry.DAL.Helpers
             };
         }
 
-        private static SqlParameter CreateParameter(T column, SqlDbType dbType, object value)
+        private static SqlParameter CreateParameter(string name, SqlDbType dbType, object value)
         {
-            return new SqlParameter($"@{column}", dbType) { Value = value ?? DBNull.Value };
+            return new SqlParameter($"@{name}", dbType) { Value = value ?? DBNull.Value };
         }
 
-        private static string GetColumnName(T column)
+        private static string GetColumnName(string column)
         {
             return column.ToString();
         }

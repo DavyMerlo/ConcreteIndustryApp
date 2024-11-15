@@ -3,7 +3,6 @@ using ConcreteIndustry.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ConcreteIndustry.BLL.DTOs.Requests;
 using ConcreteIndustry.BLL.DTOs.Responses.Projects;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ConcreteIndustry.API.Controllers
 {
@@ -25,6 +24,28 @@ namespace ConcreteIndustry.API.Controllers
                 return NotFound();
             }
             var response = new ApiResponse<IEnumerable<ProjectDTO>>(true, "success", projects, 200);
+            return Ok(response);
+        }
+
+        [HttpGet("{pageNumber:int=1}/{pageSize:int=10}")]
+        public async Task<IActionResult> GetAllProjectsPaginated(int pageNumber = 1, int pageSize = 10)
+        {
+            var projects = await service.ProjectService.GetAllPaginated(pageNumber, pageSize);
+            if (!projects.Projects.Any())
+            {
+                return NotFound();
+            }
+            var response = new PaginatedApiResponse<IEnumerable<ProjectDTO>>(
+                true, 
+                "success",
+                projects.Projects, 
+                200,
+                projects.TotalCount,
+                projects.TotalPages,
+                pageSize,
+                pageNumber,
+                projects.HasNext,
+                projects.HasPrevious);
             return Ok(response);
         }
 

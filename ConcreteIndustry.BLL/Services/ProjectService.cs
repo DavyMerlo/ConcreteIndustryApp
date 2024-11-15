@@ -57,6 +57,26 @@ namespace ConcreteIndustry.BLL.Services
             }
         }
 
+        public async Task<(IEnumerable<ProjectDTO> Projects, int TotalCount, int TotalPages, bool HasNext, bool HasPrevious)> GetAllPaginated(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var(projects, totalCount, totalPages, hasNext, hasPrevious) = await unitOfWork.Projects.GetProjectsPaginatedAsync(pageNumber, pageSize);
+                if (!projects.Any())
+                {
+                    logger.LogWarning("{Service} No projects found", typeof(ProjectService));
+                    throw new ResourceNotFoundException(ErrorType.ResourceNotFound, nameof(Project), null);
+                }
+                var projectDto = mapper.Map<IEnumerable<ProjectDTO>>(projects);
+                return (projectDto, totalCount, totalPages, hasNext, hasPrevious);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "{Service} All function error", typeof(ProjectService));
+                throw;
+            }
+        }
+
         public async Task<ProjectDTO> GetById(long id)
         {
             try

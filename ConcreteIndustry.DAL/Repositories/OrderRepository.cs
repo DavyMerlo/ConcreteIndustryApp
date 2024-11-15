@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,20 +23,20 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<OrderColumn>.CreateSelectAllQuery(TableName.Orders);
+                var query = SqlHelper.CreateSelectAllQuery(Table.Orders);
 
                 return await dataConnection.ExecuteAsync(query, reader => new Order
                 {
-                    Id = reader.GetInt64((int)OrderColumn.OrderID),
-                    ProjectID = reader.GetInt64((int)OrderColumn.ProjectID),
-                    ClientID = reader.GetInt64((int)OrderColumn.ClientID),
-                    ConcreteMixID = reader.GetInt64((int)OrderColumn.ConcreteMixID),
-                    Quantity = reader.GetDecimal((int)OrderColumn.Quantity),
-                    OrderDate = reader.GetDateTime((int)OrderColumn.OrderDate),
-                    DeliveryDate = reader.GetDateTime((int)OrderColumn.DeliveryDate),
-                    CreatedAt = reader.GetDateTime((int)OrderColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)OrderColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)OrderColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Order.OrderID),
+                    ProjectID = reader.GetInt64(Column.Order.ProjectID),
+                    ClientID = reader.GetInt64(Column.Order.ClientID),
+                    ConcreteMixID = reader.GetInt64(Column.Order.ConcreteMixID),
+                    Quantity = reader.GetDecimal(Column.Order.Quantity),
+                    OrderDate = reader.GetDateTime(Column.Order.OrderDate),
+                    DeliveryDate = reader.GetDateTime(Column.Order.DeliveryDate),
+                    CreatedAt = reader.GetDateTime(Column.Order.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Order.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Order.DeletedAt),
                 });
             }
             catch (Exception ex)
@@ -50,24 +50,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<OrderColumn>.CreateSelectByQuery(TableName.Orders, OrderColumn.OrderID);
+                var query = SqlHelper.CreateSelectByQuery(Table.Orders, Column.Order.OrderID);
 
-                var parameters = SqlHelper<OrderColumn>.CreateParameters(
-                   (OrderColumn.OrderID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.Order.OrderID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new Order
                 {
-                    Id = reader.GetInt64((int)OrderColumn.OrderID),
-                    ProjectID = reader.GetInt64((int)OrderColumn.ProjectID),
-                    ClientID = reader.GetInt64((int)OrderColumn.ClientID),
-                    ConcreteMixID = reader.GetInt64((int)OrderColumn.ConcreteMixID),
-                    Quantity = reader.GetDecimal((int)OrderColumn.Quantity),
-                    OrderDate = reader.GetDateTime((int)OrderColumn.OrderDate),
-                    DeliveryDate = reader.GetDateTime((int)OrderColumn.DeliveryDate),
-                    CreatedAt = reader.GetDateTime((int)OrderColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)OrderColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)OrderColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Order.OrderID),
+                    ProjectID = reader.GetInt64(Column.Order.ProjectID),
+                    ClientID = reader.GetInt64(Column.Order.ClientID),
+                    ConcreteMixID = reader.GetInt64(Column.Order.ConcreteMixID),
+                    Quantity = reader.GetDecimal(Column.Order.Quantity),
+                    OrderDate = reader.GetDateTime(Column.Order.OrderDate),
+                    DeliveryDate = reader.GetDateTime(Column.Order.DeliveryDate),
+                    CreatedAt = reader.GetDateTime(Column.Order.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Order.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Order.DeletedAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -85,23 +85,23 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    OrderColumn.ProjectID,
-                    OrderColumn.ClientID,
-                    OrderColumn.ConcreteMixID,
-                    OrderColumn.Quantity,
-                    OrderColumn.OrderDate,
-                    OrderColumn.DeliveryDate,
+                    Column.Order.ProjectID,
+                    Column.Order.ClientID,
+                    Column.Order.ConcreteMixID,
+                    Column.Order.Quantity,
+                    Column.Order.OrderDate,
+                    Column.Order.DeliveryDate,
                 };
 
-                var query = SqlHelper<OrderColumn>.CreateInsertQuery(TableName.Orders, OrderColumn.OrderID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.Orders, Column.Order.OrderID, columns);
 
-                var parameters = SqlHelper<OrderColumn>.CreateParameters(
-                     (OrderColumn.ProjectID, SqlDbType.BigInt, order.ProjectID),
-                     (OrderColumn.ClientID, SqlDbType.BigInt, order.ClientID),
-                     (OrderColumn.ConcreteMixID, SqlDbType.BigInt, order.ConcreteMixID),
-                     (OrderColumn.Quantity, SqlDbType.Decimal, order.Quantity),
-                     (OrderColumn.OrderDate, SqlDbType.Date, order.OrderDate),
-                     (OrderColumn.DeliveryDate, SqlDbType.Date, order.DeliveryDate)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Order.ProjectID, SqlDbType.BigInt, order.ProjectID),
+                     (Column.Order.ClientID, SqlDbType.BigInt, order.ClientID),
+                     (Column.Order.ConcreteMixID, SqlDbType.BigInt, order.ConcreteMixID),
+                     (Column.Order.Quantity, SqlDbType.Decimal, order.Quantity),
+                     (Column.Order.OrderDate, SqlDbType.Date, order.OrderDate),
+                     (Column.Order.DeliveryDate, SqlDbType.Date, order.DeliveryDate)
 
                 );
                 return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -119,24 +119,24 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    OrderColumn.ProjectID,
-                    OrderColumn.ClientID,
-                    OrderColumn.ConcreteMixID,
-                    OrderColumn.Quantity,
-                    OrderColumn.OrderDate,
-                    OrderColumn.DeliveryDate,
+                    Column.Order.ProjectID,
+                    Column.Order.ClientID,
+                    Column.Order.ConcreteMixID,
+                    Column.Order.Quantity,
+                    Column.Order.OrderDate,
+                    Column.Order.DeliveryDate,
                 };
 
-                var query = SqlHelper<OrderColumn>.CreateUpdateQuery(TableName.Orders, OrderColumn.OrderID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.Orders, Column.Order.OrderID, columns);
 
-                var parameters = SqlHelper<OrderColumn>.CreateParameters(
-                     (OrderColumn.OrderID, SqlDbType.BigInt, order.Id),
-                     (OrderColumn.ProjectID, SqlDbType.BigInt, order.ProjectID),
-                     (OrderColumn.ClientID, SqlDbType.BigInt, order.ClientID),
-                     (OrderColumn.ConcreteMixID, SqlDbType.BigInt, order.ConcreteMixID),
-                     (OrderColumn.Quantity, SqlDbType.Decimal, order.Quantity),
-                     (OrderColumn.OrderDate, SqlDbType.Date, order.OrderDate),
-                     (OrderColumn.DeliveryDate, SqlDbType.Date, order.DeliveryDate)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Order.OrderID, SqlDbType.BigInt, order.Id),
+                     (Column.Order.ProjectID, SqlDbType.BigInt, order.ProjectID),
+                     (Column.Order.ClientID, SqlDbType.BigInt, order.ClientID),
+                     (Column.Order.ConcreteMixID, SqlDbType.BigInt, order.ConcreteMixID),
+                     (Column.Order.Quantity, SqlDbType.Decimal, order.Quantity),
+                     (Column.Order.OrderDate, SqlDbType.Date, order.OrderDate),
+                     (Column.Order.DeliveryDate, SqlDbType.Date, order.DeliveryDate)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -153,10 +153,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<OrderColumn>.CreateDeleteQuery(TableName.Orders, OrderColumn.OrderID);
+                var query = SqlHelper.CreateDeleteQuery(Table.Orders, Column.Order.OrderID);
 
-                var parameters = SqlHelper<OrderColumn>.CreateParameters(
-                    (OrderColumn.OrderID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Order.OrderID, SqlDbType.BigInt, id)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);

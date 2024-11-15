@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,24 +23,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = $"SELECT * FROM {TableName.UserTokens} WHERE {TokenColumn.DeletedAt} IS NULL " +
-                    $"AND {TokenColumn.Revoked} IS NULL " +
-                    $"AND {TokenColumn.UserID} = @{TokenColumn.UserID}";
+                var query = $"SELECT * FROM {Table.UserTokens} WHERE {Column.UserToken.DeletedAt} IS NULL " +
+                    $"AND {Column.UserToken.Revoked} IS NULL " +
+                    $"AND {Column.UserToken.UserID} = @{Column.UserToken.UserID}";
 
-                var parameters = SqlHelper<TokenColumn>.CreateParameters(
-                    (TokenColumn.UserID, SqlDbType.BigInt, userId)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.UserToken.UserID, SqlDbType.BigInt, userId)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new UserToken
                 {
-                    Id = reader.GetInt64((int)TokenColumn.TokenID),
-                    UserID = reader.GetInt64((int)TokenColumn.UserID),
-                    Token = reader.GetString((int)TokenColumn.Token),
-                    Expired = reader.GetDateTime((int)TokenColumn.Expired),
-                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime((int)TokenColumn.Revoked),
-                    CreatedAt = reader.GetDateTime((int)TokenColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime((int)TokenColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)TokenColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.UserToken.TokenID),
+                    UserID = reader.GetInt64(Column.UserToken.UserID),
+                    Token = reader.GetString(Column.UserToken.Token),
+                    Expired = reader.GetDateTime(Column.UserToken.Expired),
+                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime(Column.UserToken.Revoked),
+                    CreatedAt = reader.GetDateTime(Column.UserToken.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime(Column.UserToken.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(Column.UserToken.DeletedAt),
                 }, parameters);
 
                 return result.FirstOrDefault();
@@ -56,22 +56,22 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<TokenColumn>.CreateSelectByQuery(TableName.UserTokens, TokenColumn.Token);
+                var query = SqlHelper.CreateSelectByQuery(Table.UserTokens, Column.UserToken.Token);
 
-                var parameters = SqlHelper<TokenColumn>.CreateParameters(
-                    (TokenColumn.Token, SqlDbType.NVarChar, token)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.UserToken.Token, SqlDbType.NVarChar, token)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new UserToken
                 {
-                    Id = reader.GetInt64((int)TokenColumn.TokenID),
-                    UserID = reader.GetInt64((int)TokenColumn.UserID),
-                    Token = reader.GetString((int)TokenColumn.Token),
-                    Expired = reader.GetDateTime((int)TokenColumn.Expired),
-                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime((int)TokenColumn.Revoked),
-                    CreatedAt = reader.GetDateTime((int)TokenColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime((int)TokenColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime((int)TokenColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.UserToken.TokenID),
+                    UserID = reader.GetInt64(Column.UserToken.UserID),
+                    Token = reader.GetString(Column.UserToken.Token),
+                    Expired = reader.GetDateTime(Column.UserToken.Expired),
+                    Revoked = reader.IsDBNull(4) ? null : reader.GetDateTime(Column.UserToken.Revoked),
+                    CreatedAt = reader.GetDateTime(Column.UserToken.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(6) ? null : reader.GetDateTime(Column.UserToken.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(7) ? null : reader.GetDateTime(Column.UserToken.DeletedAt),
                 }, parameters);
 
                 return result.FirstOrDefault();
@@ -89,19 +89,19 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    TokenColumn.UserID,
-                    TokenColumn.Token,
-                    TokenColumn.Expired,
-                    TokenColumn.Revoked
+                    Column.UserToken.UserID,
+                    Column.UserToken.Token,
+                    Column.UserToken.Expired,
+                    Column.UserToken.Revoked
                 };
 
-                var query = SqlHelper<TokenColumn>.CreateInsertQuery(TableName.UserTokens, TokenColumn.TokenID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.UserTokens, Column.UserToken.TokenID, columns);
 
-                var parameters = SqlHelper<TokenColumn>.CreateParameters(
-                    (TokenColumn.UserID, SqlDbType.BigInt, token.UserID),
-                    (TokenColumn.Token, SqlDbType.NVarChar, token.Token),
-                    (TokenColumn.Expired, SqlDbType.DateTime, token.Expired),
-                    (TokenColumn.Revoked, SqlDbType.DateTime, token.Revoked ?? (object)DBNull.Value)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.UserToken.UserID, SqlDbType.BigInt, token.UserID),
+                    (Column.UserToken.Token, SqlDbType.NVarChar, token.Token),
+                    (Column.UserToken.Expired, SqlDbType.DateTime, token.Expired),
+                    (Column.UserToken.Revoked, SqlDbType.DateTime, token.Revoked ?? (object)DBNull.Value)
                 );
 
                 var newTokenId = await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -120,20 +120,20 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    TokenColumn.UserID,
-                    TokenColumn.Token,
-                    TokenColumn.Expired,
-                    TokenColumn.Revoked
+                    Column.UserToken.UserID,
+                    Column.UserToken.Token,
+                    Column.UserToken.Expired,
+                    Column.UserToken.Revoked
                 };
 
-                var query = SqlHelper<TokenColumn>.CreateUpdateQuery(TableName.UserTokens, TokenColumn.TokenID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.UserTokens, Column.UserToken.TokenID, columns);
 
-                var parameters = SqlHelper<TokenColumn>.CreateParameters(
-                    (TokenColumn.TokenID, SqlDbType.BigInt, token.Id),
-                    (TokenColumn.UserID, SqlDbType.BigInt, token.UserID),
-                    (TokenColumn.Token, SqlDbType.NVarChar, token.Token),
-                    (TokenColumn.Expired, SqlDbType.DateTime, token.Expired),
-                    (TokenColumn.Revoked, SqlDbType.DateTime, token.Revoked ?? (object)DBNull.Value)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.UserToken.TokenID, SqlDbType.BigInt, token.Id),
+                    (Column.UserToken.UserID, SqlDbType.BigInt, token.UserID),
+                    (Column.UserToken.Token, SqlDbType.NVarChar, token.Token),
+                    (Column.UserToken.Expired, SqlDbType.DateTime, token.Expired),
+                    (Column.UserToken.Revoked, SqlDbType.DateTime, token.Revoked ?? (object)DBNull.Value)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);

@@ -1,5 +1,6 @@
 ﻿using ConcreteIndustry.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Http;
+using ConcreteIndustry.BLL.Services.Security;
 
 namespace ConcreteIndustry.BLL.Handlers
 {
@@ -14,11 +15,13 @@ namespace ConcreteIndustry.BLL.Handlers
 
         public async Task InvokeAsync(HttpContext context, IUnitOfWork unitOfWork)
         {
-            var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var accesToken = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
 
-            if (!string.IsNullOrWhiteSpace(token))
+            var hashed = JwtProvider.HashToken(accesToken);
+
+            if (!string.IsNullOrWhiteSpace(hashed))
             {
-                var userToken = await unitOfWork.Tokens.GetUserTokenByTokenAsync(token);
+                var userToken = await unitOfWork.Tokens.GetUserTokenByTokenAsync(hashed);
 
                 if (userToken?.Revoked != null)
                 {

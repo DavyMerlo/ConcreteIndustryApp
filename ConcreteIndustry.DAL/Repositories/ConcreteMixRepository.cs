@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,20 +23,20 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ConcreteMixColumn>.CreateSelectAllQuery(TableName.ConcreteMixes);
+                var query = SqlHelper.CreateSelectAllQuery(Table.ConcreteMixes);
 
                 return await dataConnection.ExecuteAsync(query, reader => new ConcreteMix
                 {
-                    Id = reader.GetInt64((int)ConcreteMixColumn.ConcreteMixID),
-                    Name = reader.GetString((int)ConcreteMixColumn.Name),
-                    StrengthClass = reader.GetString((int)ConcreteMixColumn.StrengthClass),
-                    MaxAggregateSize = reader.IsDBNull((int)ConcreteMixColumn.MaxAggregateSize) ? (decimal?)null : reader.GetDecimal((int)ConcreteMixColumn.MaxAggregateSize),
-                    WaterCementRatio = reader.IsDBNull((int)ConcreteMixColumn.WaterCementRatio) ? (decimal?)null : reader.GetDecimal((int)ConcreteMixColumn.WaterCementRatio),
-                    Application = reader.GetString((int)ConcreteMixColumn.Application),
-                    PricePerM3 = reader.GetDecimal((int)ConcreteMixColumn.PricePerM3),
-                    CreatedAt = reader.GetDateTime((int)ConcreteMixColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull((int)ConcreteMixColumn.UpdatedAt) ? (DateTime?)null : reader.GetDateTime((int)ConcreteMixColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull((int)ConcreteMixColumn.DeletedAt) ? (DateTime?)null : reader.GetDateTime((int)ConcreteMixColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.ConcreteMix.ConcreteMixID),
+                    Name = reader.GetString(Column.ConcreteMix.Name),
+                    StrengthClass = reader.GetString(Column.ConcreteMix.StrengthClass),
+                    MaxAggregateSize = reader.IsDBNull(Column.ConcreteMix.MaxAggregateSize) ? (decimal?)null : reader.GetDecimal(Column.ConcreteMix.MaxAggregateSize),
+                    WaterCementRatio = reader.IsDBNull(Column.ConcreteMix.WaterCementRatio) ? (decimal?)null : reader.GetDecimal(Column.ConcreteMix.WaterCementRatio),
+                    Application = reader.GetString(Column.ConcreteMix.Application),
+                    PricePerM3 = reader.GetDecimal(Column.ConcreteMix.PricePerM3),
+                    CreatedAt = reader.GetDateTime(Column.ConcreteMix.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(Column.ConcreteMix.UpdatedAt) ? (DateTime?)null : reader.GetDateTime(Column.ConcreteMix.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(Column.ConcreteMix.DeletedAt) ? (DateTime?)null : reader.GetDateTime(Column.ConcreteMix.DeletedAt),
                 });
             }
             catch (Exception ex)
@@ -50,24 +50,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ConcreteMixColumn>.CreateSelectByQuery(TableName.ConcreteMixes, ConcreteMixColumn.ConcreteMixID);
+                var query = SqlHelper.CreateSelectByQuery(Table.ConcreteMixes, Column.ConcreteMix.ConcreteMixID);
 
-                var parameters = SqlHelper<ConcreteMixColumn>.CreateParameters(
-                    (ConcreteMixColumn.ConcreteMixID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.ConcreteMix.ConcreteMixID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader => new ConcreteMix
                 {
-                    Id = reader.GetInt64((int)ConcreteMixColumn.ConcreteMixID),
-                    Name = reader.GetString((int)ConcreteMixColumn.Name),
-                    StrengthClass = reader.GetString((int)ConcreteMixColumn.StrengthClass),
-                    MaxAggregateSize = reader.IsDBNull((int)ConcreteMixColumn.MaxAggregateSize) ? (decimal?)null : reader.GetDecimal((int)ConcreteMixColumn.MaxAggregateSize),
-                    WaterCementRatio = reader.IsDBNull((int)ConcreteMixColumn.WaterCementRatio) ? (decimal?)null : reader.GetDecimal((int)ConcreteMixColumn.WaterCementRatio),
-                    Application = reader.GetString((int)ConcreteMixColumn.Application),
-                    PricePerM3 = reader.GetDecimal((int)ConcreteMixColumn.PricePerM3),
-                    CreatedAt = reader.GetDateTime((int)ConcreteMixColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull((int)ConcreteMixColumn.UpdatedAt) ? (DateTime?)null : reader.GetDateTime((int)ConcreteMixColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull((int)ConcreteMixColumn.DeletedAt) ? (DateTime?)null : reader.GetDateTime((int)ConcreteMixColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.ConcreteMix.ConcreteMixID),
+                    Name = reader.GetString(Column.ConcreteMix.Name),
+                    StrengthClass = reader.GetString(Column.ConcreteMix.StrengthClass),
+                    MaxAggregateSize = reader.IsDBNull(Column.ConcreteMix.MaxAggregateSize) ? (decimal?)null : reader.GetDecimal(Column.ConcreteMix.MaxAggregateSize),
+                    WaterCementRatio = reader.IsDBNull(Column.ConcreteMix.WaterCementRatio) ? (decimal?)null : reader.GetDecimal(Column.ConcreteMix.WaterCementRatio),
+                    Application = reader.GetString(Column.ConcreteMix.Application),
+                    PricePerM3 = reader.GetDecimal(Column.ConcreteMix.PricePerM3),
+                    CreatedAt = reader.GetDateTime(Column.ConcreteMix.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(Column.ConcreteMix.UpdatedAt) ? (DateTime?)null : reader.GetDateTime(Column.ConcreteMix.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(Column.ConcreteMix.DeletedAt) ? (DateTime?)null : reader.GetDateTime(Column.ConcreteMix.DeletedAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -85,23 +85,23 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    ConcreteMixColumn.Name,
-                    ConcreteMixColumn.StrengthClass,
-                    ConcreteMixColumn.MaxAggregateSize,
-                    ConcreteMixColumn.WaterCementRatio,
-                    ConcreteMixColumn.Application,
-                    ConcreteMixColumn.PricePerM3,
+                    Column.ConcreteMix.Name,
+                    Column.ConcreteMix.StrengthClass,
+                    Column.ConcreteMix.MaxAggregateSize,
+                    Column.ConcreteMix.WaterCementRatio,
+                    Column.ConcreteMix.Application,
+                    Column.ConcreteMix.PricePerM3,
                 };
 
-                var query = SqlHelper<ConcreteMixColumn>.CreateInsertQuery(TableName.ConcreteMixes, ConcreteMixColumn.ConcreteMixID, columns);
+                var query = SqlHelper.CreateInsertQuery(Table.ConcreteMixes, Column.ConcreteMix.ConcreteMixID, columns);
 
-                var parameters = SqlHelper<ConcreteMixColumn>.CreateParameters(
-                    (ConcreteMixColumn.Name, SqlDbType.NVarChar, concreteMix.Name),
-                    (ConcreteMixColumn.StrengthClass, SqlDbType.NVarChar, concreteMix.StrengthClass),
-                    (ConcreteMixColumn.MaxAggregateSize, SqlDbType.Decimal, concreteMix.MaxAggregateSize ?? (object)DBNull.Value),
-                    (ConcreteMixColumn.WaterCementRatio, SqlDbType.Decimal, concreteMix.WaterCementRatio ?? (object)DBNull.Value),
-                    (ConcreteMixColumn.Application, SqlDbType.NVarChar, concreteMix.Application),
-                    (ConcreteMixColumn.PricePerM3, SqlDbType.Decimal, concreteMix.PricePerM3)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.ConcreteMix.Name, SqlDbType.NVarChar, concreteMix.Name),
+                    (Column.ConcreteMix.StrengthClass, SqlDbType.NVarChar, concreteMix.StrengthClass),
+                    (Column.ConcreteMix.MaxAggregateSize, SqlDbType.Decimal, concreteMix.MaxAggregateSize ?? (object)DBNull.Value),
+                    (Column.ConcreteMix.WaterCementRatio, SqlDbType.Decimal, concreteMix.WaterCementRatio ?? (object)DBNull.Value),
+                    (Column.ConcreteMix.Application, SqlDbType.NVarChar, concreteMix.Application),
+                    (Column.ConcreteMix.PricePerM3, SqlDbType.Decimal, concreteMix.PricePerM3)
                 );
 
                 return await dataConnection.ExecuteScalarAsync<int>(query, parameters);
@@ -118,25 +118,25 @@ namespace ConcreteIndustry.DAL.Repositories
             try
             {
                 var columns = new[]
-                {
-                    ConcreteMixColumn.Name,
-                    ConcreteMixColumn.StrengthClass,
-                    ConcreteMixColumn.MaxAggregateSize,
-                    ConcreteMixColumn.WaterCementRatio,
-                    ConcreteMixColumn.Application,
-                    ConcreteMixColumn.PricePerM3,
+               {
+                    Column.ConcreteMix.Name,
+                    Column.ConcreteMix.StrengthClass,
+                    Column.ConcreteMix.MaxAggregateSize,
+                    Column.ConcreteMix.WaterCementRatio,
+                    Column.ConcreteMix.Application,
+                    Column.ConcreteMix.PricePerM3,
                 };
 
-                var query = SqlHelper<ConcreteMixColumn>.CreateUpdateQuery(TableName.ConcreteMixes, ConcreteMixColumn.ConcreteMixID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.ConcreteMixes, Column.ConcreteMix.ConcreteMixID, columns);
 
-                var parameters = SqlHelper<ConcreteMixColumn>.CreateParameters(
-                    (ConcreteMixColumn.ConcreteMixID, SqlDbType.BigInt, concreteMix.Id),
-                    (ConcreteMixColumn.Name, SqlDbType.NVarChar, concreteMix.Name),
-                    (ConcreteMixColumn.StrengthClass, SqlDbType.NVarChar, concreteMix.StrengthClass),
-                    (ConcreteMixColumn.MaxAggregateSize, SqlDbType.Decimal, concreteMix.MaxAggregateSize ?? (object)DBNull.Value),
-                    (ConcreteMixColumn.WaterCementRatio, SqlDbType.Decimal, concreteMix.WaterCementRatio ?? (object)DBNull.Value),
-                    (ConcreteMixColumn.Application, SqlDbType.NVarChar, concreteMix.Application),
-                    (ConcreteMixColumn.PricePerM3, SqlDbType.Decimal, concreteMix.PricePerM3)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.ConcreteMix.ConcreteMixID, SqlDbType.BigInt, concreteMix.Id),
+                    (Column.ConcreteMix.Name, SqlDbType.NVarChar, concreteMix.Name),
+                    (Column.ConcreteMix.StrengthClass, SqlDbType.NVarChar, concreteMix.StrengthClass),
+                    (Column.ConcreteMix.MaxAggregateSize, SqlDbType.Decimal, concreteMix.MaxAggregateSize ?? (object)DBNull.Value),
+                    (Column.ConcreteMix.WaterCementRatio, SqlDbType.Decimal, concreteMix.WaterCementRatio ?? (object)DBNull.Value),
+                    (Column.ConcreteMix.Application, SqlDbType.NVarChar, concreteMix.Application),
+                    (Column.ConcreteMix.PricePerM3, SqlDbType.Decimal, concreteMix.PricePerM3)
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -153,10 +153,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<ConcreteMixColumn>.CreateDeleteQuery(TableName.ConcreteMixes, ConcreteMixColumn.ConcreteMixID);
+                var query = SqlHelper.CreateDeleteQuery(Table.ConcreteMixes, Column.ConcreteMix.ConcreteMixID);
 
-                var parameters = SqlHelper<ConcreteMixColumn>.CreateParameters(
-                    (ConcreteMixColumn.ConcreteMixID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.ConcreteMix.ConcreteMixID, SqlDbType.BigInt, id)
                 );   
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);

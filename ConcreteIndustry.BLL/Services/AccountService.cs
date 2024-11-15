@@ -9,7 +9,6 @@ using ConcreteIndustry.BLL.Services.Security;
 using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace ConcreteIndustry.BLL.Services
@@ -53,8 +52,6 @@ namespace ConcreteIndustry.BLL.Services
 
         public async Task<AuthenticationDTO> Login(LoginUserRequest request)
         {
-            var stopwatch = Stopwatch.StartNew();
-
             try
             {
                 var user = await unitOfWork.AppUsers.GetUserByUsernameAsync(request.Email);
@@ -72,12 +69,6 @@ namespace ConcreteIndustry.BLL.Services
             {
                 logger.LogError(ex,"{Service} Login function error", typeof(AppUserService));
                 throw;
-            }
-            finally
-            {
-                stopwatch.Stop();
-                var elapsed = stopwatch.Elapsed;
-                Console.WriteLine($"Login took: {elapsed.TotalMilliseconds} ms");
             }
         }
 

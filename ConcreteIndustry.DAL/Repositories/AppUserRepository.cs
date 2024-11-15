@@ -1,4 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Enums;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
@@ -23,21 +24,21 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AppUserColumn>.CreateSelectAllQuery(TableName.AppUsers);
+                var query = SqlHelper.CreateSelectAllQuery(Table.AppUsers);
 
                 return await dataConnection.ExecuteAsync(query, reader => new AppUser
                 {
-                    Id = reader.GetInt64((int)AppUserColumn.UserID),
-                    FirstName = reader.GetString((int)AppUserColumn.FirstName),
-                    LastName = reader.GetString((int)AppUserColumn.LastName),
-                    UserName = reader.GetString((int)AppUserColumn.UserName),
-                    Email = reader.GetString((int)AppUserColumn.Email),
-                    HashedPassword = reader.GetString((int)AppUserColumn.HashedPassword),
-                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString((int)AppUserColumn.Role)),
-                    CreatedAt = reader.GetDateTime((int)AppUserColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull((int)AppUserColumn.UpdatedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull((int)AppUserColumn.DeletedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.DeletedAt),
-                    LastLoginAt = reader.IsDBNull((int)AppUserColumn.LastLoginAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.LastLoginAt),
+                    Id = reader.GetInt64(Column.AppUser.UserID),
+                    FirstName = reader.GetString(Column.AppUser.FirstName),
+                    LastName = reader.GetString(Column.AppUser.LastName),
+                    UserName = reader.GetString(Column.AppUser.UserName),
+                    Email = reader.GetString(Column.AppUser.Email),
+                    HashedPassword = reader.GetString(Column.AppUser.HashedPassword),
+                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString(Column.AppUser.Role)),
+                    CreatedAt = reader.GetDateTime(Column.AppUser.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(Column.AppUser.UpdatedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(Column.AppUser.DeletedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.DeletedAt),
+                    LastLoginAt = reader.IsDBNull(Column.AppUser.LastLoginAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.LastLoginAt),
                 });
             }
             catch (Exception ex)
@@ -51,26 +52,26 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AppUserColumn>.CreateSelectByQuery(TableName.AppUsers, AppUserColumn.UserID);
+                var query = SqlHelper.CreateSelectByQuery(Table.AppUsers, Column.AppUser.UserID);
 
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                   (AppUserColumn.UserID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.AppUser.UserID, SqlDbType.BigInt, id)
                 );
 
                 var result = await dataConnection.ExecuteAsync(query, reader =>
                 new AppUser
                 {
-                    Id = reader.GetInt64((int)AppUserColumn.UserID),
-                    FirstName = reader.GetString((int)AppUserColumn.FirstName),
-                    LastName = reader.GetString((int)AppUserColumn.LastName),
-                    UserName = reader.GetString((int)AppUserColumn.UserName),
-                    Email = reader.GetString((int)AppUserColumn.Email),
-                    HashedPassword = reader.GetString((int)AppUserColumn.HashedPassword),
-                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString((int)AppUserColumn.Role)),
-                    CreatedAt = reader.GetDateTime((int)AppUserColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull((int)AppUserColumn.UpdatedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull((int)AppUserColumn.DeletedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.DeletedAt),
-                    LastLoginAt = reader.IsDBNull((int)AppUserColumn.LastLoginAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.LastLoginAt),
+                    Id = reader.GetInt64(Column.AppUser.UserID),
+                    FirstName = reader.GetString(Column.AppUser.FirstName),
+                    LastName = reader.GetString(Column.AppUser.LastName),
+                    UserName = reader.GetString(Column.AppUser.UserName),
+                    Email = reader.GetString(Column.AppUser.Email),
+                    HashedPassword = reader.GetString(Column.AppUser.HashedPassword),
+                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString(Column.AppUser.Role)),
+                    CreatedAt = reader.GetDateTime(Column.AppUser.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(Column.AppUser.UpdatedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(Column.AppUser.DeletedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.DeletedAt),
+                    LastLoginAt = reader.IsDBNull(Column.AppUser.LastLoginAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.LastLoginAt),
                 }, parameters);
 
                 return result.SingleOrDefault();
@@ -86,26 +87,24 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                Enum procedure = StoredProcedures.GetUserByEmail;
-
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                    (AppUserColumn.Email, SqlDbType.NVarChar, email)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.AppUser.Email, SqlDbType.NVarChar, email)
                 );
 
-                var result = await dataConnection.ExecuteAsync(procedure.ToString(), reader =>
+                var result = await dataConnection.ExecuteAsync(StoredProcedures.GetUserByEmail, reader =>
                 new AppUser
                 {
-                    Id = reader.GetInt64((int)AppUserColumn.UserID),
-                    FirstName = reader.GetString((int)AppUserColumn.FirstName),
-                    LastName = reader.GetString((int)AppUserColumn.LastName),
-                    UserName = reader.GetString((int)AppUserColumn.UserName),
-                    Email = reader.GetString((int)AppUserColumn.Email),
-                    HashedPassword = reader.GetString((int)AppUserColumn.HashedPassword),
-                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString((int)AppUserColumn.Role)),
-                    CreatedAt = reader.GetDateTime((int)AppUserColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull((int)AppUserColumn.UpdatedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull((int)AppUserColumn.DeletedAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.DeletedAt),
-                    LastLoginAt = reader.IsDBNull((int)AppUserColumn.LastLoginAt) ? (DateTime?)null : reader.GetDateTime((int)AppUserColumn.LastLoginAt),
+                    Id = reader.GetInt64(Column.AppUser.UserID),
+                    FirstName = reader.GetString(Column.AppUser.FirstName),
+                    LastName = reader.GetString(Column.AppUser.LastName),
+                    UserName = reader.GetString(Column.AppUser.UserName),
+                    Email = reader.GetString(Column.AppUser.Email),
+                    HashedPassword = reader.GetString(Column.AppUser.HashedPassword),
+                    Role = (Roles)Enum.Parse(typeof(Roles), reader.GetString(Column.AppUser.Role)),
+                    CreatedAt = reader.GetDateTime(Column.AppUser.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(Column.AppUser.UpdatedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(Column.AppUser.DeletedAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.DeletedAt),
+                    LastLoginAt = reader.IsDBNull(Column.AppUser.LastLoginAt) ? (DateTime?)null : reader.GetDateTime(Column.AppUser.LastLoginAt),
                 }, parameters, CommandType.StoredProcedure);
 
                 return result.FirstOrDefault();
@@ -121,29 +120,17 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var columns = new[]
-                {
-                    AppUserColumn.FirstName,
-                    AppUserColumn.LastName,
-                    AppUserColumn.UserName,
-                    AppUserColumn.Email,
-                    AppUserColumn.HashedPassword,
-                    AppUserColumn.Role,
-                };
+                var parameters = SqlHelper.CreateParameters(
 
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-
-                        (AppUserColumn.FirstName, SqlDbType.NVarChar, appUser.FirstName),
-                        (AppUserColumn.LastName, SqlDbType.NVarChar, appUser.LastName),
-                        (AppUserColumn.UserName, SqlDbType.NVarChar, appUser.UserName),
-                        (AppUserColumn.Email, SqlDbType.NVarChar, appUser.Email),
-                        (AppUserColumn.HashedPassword, SqlDbType.NVarChar, appUser.HashedPassword),
-                        (AppUserColumn.Role, SqlDbType.NVarChar, appUser.Role.ToString()),
-                        (AppUserColumn.UserID, SqlDbType.BigInt, appUser.Id)
+                        (Column.AppUser.FirstName, SqlDbType.NVarChar, appUser.FirstName),
+                        (Column.AppUser.LastName, SqlDbType.NVarChar, appUser.LastName),
+                        (Column.AppUser.UserName, SqlDbType.NVarChar, appUser.UserName),
+                        (Column.AppUser.Email, SqlDbType.NVarChar, appUser.Email),
+                        (Column.AppUser.HashedPassword, SqlDbType.NVarChar, appUser.HashedPassword),
+                        (Column.AppUser.Role, SqlDbType.NVarChar, appUser.Role.ToString()),
+                        (Column.AppUser.UserID, SqlDbType.BigInt, appUser.Id)
                 );
-
-                var userId = await dataConnection.ExecuteScalarAsync<int>(StoredProcedures.RegisterUser.ToString(), parameters, CommandType.StoredProcedure);
-                return userId;
+                return await dataConnection.ExecuteScalarAsync<int>(StoredProcedures.RegisterUser, parameters, CommandType.StoredProcedure);
             }
             catch (Exception ex)
             {
@@ -158,22 +145,22 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    AppUserColumn.FirstName,
-                    AppUserColumn.LastName,
-                    AppUserColumn.UserName,
-                    AppUserColumn.Email,
-                    AppUserColumn.Role,
+                    Column.AppUser.FirstName,
+                    Column.AppUser.LastName,
+                    Column.AppUser.UserName,
+                    Column.AppUser.Email,
+                    Column.AppUser.Role,
                 };
 
-                var query = SqlHelper<AppUserColumn>.CreateUpdateQuery(TableName.AppUsers, AppUserColumn.UserID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.AppUsers, Column.AppUser.UserID, columns);
 
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                       (AppUserColumn.UserID, SqlDbType.BigInt, appUser.Id),
-                       (AppUserColumn.FirstName, SqlDbType.NVarChar, appUser.FirstName),
-                       (AppUserColumn.LastName, SqlDbType.NVarChar, appUser.LastName),
-                       (AppUserColumn.UserName, SqlDbType.NVarChar, appUser.UserName),
-                       (AppUserColumn.Email, SqlDbType.NVarChar, appUser.Email),
-                       (AppUserColumn.Role, SqlDbType.NVarChar, appUser.Role.ToString())
+                var parameters = SqlHelper.CreateParameters(
+                       (Column.AppUser.UserID, SqlDbType.BigInt, appUser.Id),
+                       (Column.AppUser.FirstName, SqlDbType.NVarChar, appUser.FirstName),
+                       (Column.AppUser.LastName, SqlDbType.NVarChar, appUser.LastName),
+                       (Column.AppUser.UserName, SqlDbType.NVarChar, appUser.UserName),
+                       (Column.AppUser.Email, SqlDbType.NVarChar, appUser.Email),
+                       (Column.AppUser.Role, SqlDbType.NVarChar, appUser.Role.ToString())
                 );
 
                 int rowsAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -190,10 +177,10 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var query = SqlHelper<AppUserColumn>.CreateDeleteQuery(TableName.AppUsers, AppUserColumn.UserID);
+                var query = SqlHelper.CreateDeleteQuery(Table.AppUsers, Column.AppUser.UserID);
 
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                    (AppUserColumn.UserID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.AppUser.UserID, SqlDbType.BigInt, id)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -212,14 +199,14 @@ namespace ConcreteIndustry.DAL.Repositories
             {
                 var columns = new[]
                 {
-                    AppUserColumn.HashedPassword,
+                    Column.AppUser.HashedPassword,
                 };
 
-                var query = SqlHelper<AppUserColumn>.CreateUpdateQuery(TableName.AppUsers, AppUserColumn.UserID, columns);
+                var query = SqlHelper.CreateUpdateQuery(Table.AppUsers, Column.AppUser.UserID, columns);
 
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                    (AppUserColumn.UserID, SqlDbType.BigInt, userId),
-                    (AppUserColumn.HashedPassword, SqlDbType.NVarChar, password)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.AppUser.UserID, SqlDbType.BigInt, userId),
+                    (Column.AppUser.HashedPassword, SqlDbType.NVarChar, password)
                 );
 
                 int rowAffected = await dataConnection.ExecuteNonQueryAsync(query, parameters);
@@ -236,12 +223,12 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var parameters = SqlHelper<AppUserColumn>.CreateParameters(
-                   (AppUserColumn.UserID, SqlDbType.BigInt, userId)
+                var parameters = SqlHelper.CreateParameters(
+                   (Column.AppUser.UserID, SqlDbType.BigInt, userId)
                 );
 
                 return await dataConnection.ExecuteOutputParameterAsync<string>(
-                   StoredProcedures.ViewHashedPasswordByUserId.ToString(),
+                   StoredProcedures.ViewHashedPasswordByUserId,
                    parameters,
                    "HashedPassword",
                    SqlDbType.NVarChar,

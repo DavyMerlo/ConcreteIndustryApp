@@ -1,5 +1,5 @@
-﻿using ConcreteIndustry.DAL.Entities;
-using ConcreteIndustry.DAL.Enums;
+﻿using ConcreteIndustry.DAL.Constants;
+using ConcreteIndustry.DAL.Entities;
 using ConcreteIndustry.DAL.Helpers;
 using ConcreteIndustry.DAL.Repositories.Helpers.Interfaces;
 using ConcreteIndustry.DAL.Repositories.Interfaces;
@@ -23,18 +23,18 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                return await dataConnection.ExecuteAsync(StoredProcedures.ViewProjects.ToString(), reader => new Project
+                return await dataConnection.ExecuteAsync(StoredProcedures.ViewProjects, reader => new Project
                 {
-                    Id = reader.GetInt64((int)ProjectColumn.ProjectID),
-                    Name = reader.GetString((int)ProjectColumn.Name),
-                    Location = reader.GetString((int)ProjectColumn.Location),
-                    ClientID = reader.GetInt64((int)ProjectColumn.ClientID),
-                    StartDate = reader.GetDateTime((int)ProjectColumn.StartDate),
-                    EndDate = reader.GetDateTime((int)ProjectColumn.EndDate),
-                    EstimatedValue = reader.GetDecimal((int)ProjectColumn.EstimatedVolume),
-                    CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ProjectColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)ProjectColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Project.ProjectID),
+                    Name = reader.GetString(Column.Project.Name),
+                    Location = reader.GetString(Column.Project.Location),
+                    ClientID = reader.GetInt64(Column.Project.ClientID),
+                    StartDate = reader.GetDateTime(Column.Project.StartDate),
+                    EndDate = reader.GetDateTime(Column.Project.EndDate),
+                    EstimatedValue = reader.GetDecimal(Column.Project.EstimatedVolume),
+                    CreatedAt = reader.GetDateTime(Column.Project.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Project.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Project.DeletedAt),
                 },
                 null, 
                 CommandType.StoredProcedure
@@ -47,31 +47,58 @@ namespace ConcreteIndustry.DAL.Repositories
             }
         }
 
+        public async Task<(IEnumerable<Project> Projects, int TotalCount, int TotalPages, bool HasNext, bool HasPrevious)> GetProjectsPaginatedAsync(
+            int pageNumber, int pageSize)
+        {
+            var parameters = SqlHelper.CreateParameters(
+                 (DynamicParams.Project.PageNumber, SqlDbType.Int, pageNumber),
+                 (DynamicParams.Project.PageSize, SqlDbType.Int, pageSize)
+            );
+
+            var test = await dataConnection.ExecuteAsyncWithMetaData(StoredProcedures.ViewProjectsPaginated, reader => new Project
+            {
+                Id = reader.GetInt64(Column.Project.ProjectID),
+                Name = reader.GetString(Column.Project.Name),
+                Location = reader.GetString(Column.Project.Location),
+                ClientID = reader.GetInt64(Column.Project.ClientID),
+                StartDate = reader.GetDateTime(Column.Project.StartDate),
+                EndDate = reader.GetDateTime(Column.Project.EndDate),
+                EstimatedValue = reader.GetDecimal(Column.Project.EstimatedVolume),
+                CreatedAt = reader.GetDateTime(Column.Project.CreatedAt),
+                UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Project.UpdatedAt),
+                DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Project.DeletedAt),
+            },
+               parameters,
+               CommandType.StoredProcedure
+            );
+
+            return test;
+        }
+
         public async Task<Project?> GetProjectByIdAsync(long id)
         {
             try
             {
-                var parameters = SqlHelper<ProjectColumn>.CreateParameters(
-                   (ProjectColumn.ProjectID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Project.ProjectID, SqlDbType.Int, id)
                 );
 
-                var result = await dataConnection.ExecuteAsync(StoredProcedures.ViewProjectsById.ToString(), reader => new Project
+                var result = await dataConnection.ExecuteAsync(StoredProcedures.ViewProjectsById, reader => new Project
                 {
-                    Id = reader.GetInt64((int)ProjectColumn.ProjectID),
-                    Name = reader.GetString((int)ProjectColumn.Name),
-                    Location = reader.GetString((int)ProjectColumn.Location),
-                    ClientID = reader.GetInt64((int)ProjectColumn.ClientID),
-                    StartDate = reader.GetDateTime((int)ProjectColumn.StartDate),
-                    EndDate = reader.GetDateTime((int)ProjectColumn.EndDate),
-                    EstimatedValue = reader.GetDecimal((int)ProjectColumn.EstimatedVolume),
-                    CreatedAt = reader.GetDateTime((int)ProjectColumn.CreatedAt),
-                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime((int)ProjectColumn.UpdatedAt),
-                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime((int)ProjectColumn.DeletedAt),
+                    Id = reader.GetInt64(Column.Project.ProjectID),
+                    Name = reader.GetString(Column.Project.Name),
+                    Location = reader.GetString(Column.Project.Location),
+                    ClientID = reader.GetInt64(Column.Project.ClientID),
+                    StartDate = reader.GetDateTime(Column.Project.StartDate),
+                    EndDate = reader.GetDateTime(Column.Project.EndDate),
+                    EstimatedValue = reader.GetDecimal(Column.Project.EstimatedVolume),
+                    CreatedAt = reader.GetDateTime(Column.Project.CreatedAt),
+                    UpdatedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(Column.Project.UpdatedAt),
+                    DeletedAt = reader.IsDBNull(9) ? null : reader.GetDateTime(Column.Project.DeletedAt),
                 }, 
                 parameters, 
                 CommandType.StoredProcedure
                 );
-
                 return result.SingleOrDefault();
             }
             catch (Exception ex)
@@ -85,14 +112,14 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var parameters = SqlHelper<ProjectColumn>.CreateParameters(
-                     (ProjectColumn.Name, SqlDbType.NVarChar, project.Name),
-                     (ProjectColumn.Location, SqlDbType.NVarChar, project.Location),
-                     (ProjectColumn.ClientID, SqlDbType.BigInt, project.ClientID),
-                     (ProjectColumn.StartDate, SqlDbType.Date, project.StartDate.Date),
-                     (ProjectColumn.EndDate, SqlDbType.Date, project.EndDate.Date),
-                     (ProjectColumn.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue),
-                     (ProjectColumn.ProjectID, SqlDbType.BigInt, project.Id)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Project.Name, SqlDbType.NVarChar, project.Name),
+                     (Column.Project.Location, SqlDbType.NVarChar, project.Location),
+                     (Column.Project.ClientID, SqlDbType.BigInt, project.ClientID),
+                     (Column.Project.StartDate, SqlDbType.Date, project.StartDate.Date),
+                     (Column.Project.EndDate, SqlDbType.Date, project.EndDate.Date),
+                     (Column.Project.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue),
+                     (Column.Project.ProjectID, SqlDbType.BigInt, project.Id)
                 );
                 return await dataConnection.ExecuteScalarAsync<int>(
                     StoredProcedures.AddProject.ToString(), 
@@ -111,14 +138,14 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var parameters = SqlHelper<ProjectColumn>.CreateParameters(
-                     (ProjectColumn.ProjectID, SqlDbType.BigInt, project.Id),
-                     (ProjectColumn.Name, SqlDbType.NVarChar, project.Name),
-                     (ProjectColumn.Location, SqlDbType.NVarChar, project.Location),
-                     (ProjectColumn.ClientID, SqlDbType.BigInt, project.ClientID),
-                     (ProjectColumn.StartDate, SqlDbType.Date, project.StartDate.Date),
-                     (ProjectColumn.EndDate, SqlDbType.Date, project.EndDate.Date),
-                     (ProjectColumn.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue)
+                var parameters = SqlHelper.CreateParameters(
+                     (Column.Project.ProjectID, SqlDbType.BigInt, project.Id),
+                     (Column.Project.Name, SqlDbType.NVarChar, project.Name),
+                     (Column.Project.Location, SqlDbType.NVarChar, project.Location),
+                     (Column.Project.ClientID, SqlDbType.BigInt, project.ClientID),
+                     (Column.Project.StartDate, SqlDbType.Date, project.StartDate.Date),
+                     (Column.Project.EndDate, SqlDbType.Date, project.EndDate.Date),
+                     (Column.Project.EstimatedVolume, SqlDbType.Decimal, project.EstimatedValue)
                 );
 
                 return await dataConnection.ExecuteNonQueryAsyncNew(
@@ -139,8 +166,8 @@ namespace ConcreteIndustry.DAL.Repositories
         {
             try
             {
-                var parameters = SqlHelper<ProjectColumn>.CreateParameters(
-                    (ProjectColumn.ProjectID, SqlDbType.BigInt, id)
+                var parameters = SqlHelper.CreateParameters(
+                    (Column.Project.ProjectID, SqlDbType.BigInt, id)
                 );
 
                 return await dataConnection.ExecuteNonQueryAsyncNew(
